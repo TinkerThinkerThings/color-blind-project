@@ -67,7 +67,11 @@ class SliderActivity : AppCompatActivity() {
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-
+        btnGetStarted.setOnClickListener {
+            val intent = Intent(this, com.colorblind.spectra.UI.form.FormActivity::class.java)
+            startActivity(intent)
+            finish() // Tutup SliderActivity agar tidak bisa balik
+        }
         autoSlidePages()
     }
 
