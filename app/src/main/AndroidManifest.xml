@@ -12,18 +12,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spectra">
         <activity
-            android:name=".UI.slider.SliderActivity"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER"/>
-        </intent-filter>
+            android:name=".UI.form.FormActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
+            android:name=".UI.slider.SliderActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.MainActivity"
-            android:exported="false"/>
-
-
+            android:exported="false" />
     </application>
 
 </manifest>

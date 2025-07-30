@@ -4,6 +4,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
@@ -21,9 +23,11 @@ class SliderActivity : AppCompatActivity() {
     private lateinit var dots: ArrayList<TextView>
     private lateinit var layouts: IntArray
     private lateinit var sliderPager: ViewPager
-    private lateinit var btnNext: Button
     private lateinit var btnGetStarted: Button
     private lateinit var dotsLayout: LinearLayout
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var currentPage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +37,7 @@ class SliderActivity : AppCompatActivity() {
 
         sliderPager = findViewById(R.id.slider_pager)
         dotsLayout = findViewById(R.id.dotsLayout)
-        btnNext = findViewById(R.id.bstnext)          // Tombol Next
-        btnGetStarted = findViewById(R.id.btnext)     // Tombol Get Started
+        btnGetStarted = findViewById(R.id.btnext) // Tombol Get Started
 
         layouts = intArrayOf(
             R.layout.slider1,
@@ -48,38 +51,36 @@ class SliderActivity : AppCompatActivity() {
 
         addDotsIndicator(0)
 
-        btnNext.setOnClickListener {
-            val currentItem = sliderPager.currentItem
-            if (currentItem < layouts.size - 1) {
-                sliderPager.currentItem = currentItem + 1
-            }
-        }
-
-//        btnGetStarted.setOnClickListener {
-//            val intent = Intent(this, LoginActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
-
         sliderPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
                 addDotsIndicator(position)
+                currentPage = position
 
                 if (position == layouts.size - 1) {
-                    // Di slide terakhir: tampilkan tombol Get Started, sembunyikan Next
                     btnGetStarted.visibility = View.VISIBLE
-                    btnNext.visibility = View.INVISIBLE
                 } else {
-                    // Slide selain terakhir: tampilkan Next, sembunyikan Get Started
                     btnGetStarted.visibility = View.INVISIBLE
-                    btnNext.visibility = View.VISIBLE
                 }
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
+
+        autoSlidePages()
+    }
+
+    private fun autoSlidePages() {
+        val runnable = object : Runnable {
+            override fun run() {
+                if (currentPage < layouts.size - 1) {
+                    sliderPager.currentItem = currentPage + 1
+                }
+                handler.postDelayed(this, 3000) // Ganti slide setiap 3 detik
+            }
+        }
+        handler.postDelayed(runnable, 3000)
     }
 
     private fun addDotsIndicator(position: Int) {
@@ -107,5 +108,10 @@ class SliderActivity : AppCompatActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = Color.TRANSPARENT
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
     }
 }

@@ -10,6 +10,7 @@
     <color name="white_80">#CDFFFFFF</color>
     <color name="navy">#1F5696</color>
     <color name="mainColor">#237AEE</color>
-    <color name="colorTransparentWhite">#F2FFFFFF</color>
+    <color name="colorTransparentWhite">#40FFFFFF</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="Bgcolor">#2D3250</color>
 </resources>

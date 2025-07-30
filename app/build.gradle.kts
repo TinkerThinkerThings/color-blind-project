@@ -44,5 +44,10 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("com.airbnb.android:lottie:6.6.7")
+    implementation("com.tbuonomo:dotsindicator:5.1.0")
     androidTestImplementation(libs.androidx.espresso.core)
 }
