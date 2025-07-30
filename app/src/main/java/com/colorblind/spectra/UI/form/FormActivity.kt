@@ -1,13 +1,16 @@
 package com.colorblind.spectra.UI.form
 
 import android.os.Bundle
-import android.text.InputFilter
-import android.text.InputType
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.colorblind.spectra.R
+import com.colorblind.spectra.data.lokal.entity.EntityBiodata
+import com.colorblind.spectra.data.lokal.room.AppDatabase
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FormActivity : AppCompatActivity() {
 
@@ -20,51 +23,37 @@ class FormActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
 
-        // Temukan view
         etNama = findViewById(R.id.namaLengkapEdit)
         etUsia = findViewById(R.id.usiaEdit)
         etJenisKelamin = findViewById(R.id.jenisKelaminEdit)
         btnSimpan = findViewById(R.id.btnSimpan)
 
-        // Atur input type & filter untuk usia
-        etUsia.inputType = InputType.TYPE_CLASS_NUMBER
-        etUsia.filters = arrayOf(InputFilter.LengthFilter(2))
+        val db = AppDatabase.getInstance(this)
+        val biodataDao = db.biodataDao()
 
         btnSimpan.setOnClickListener {
-            validateForm()
+            val nama = etNama.text.toString().trim()
+            val usiaText = etUsia.text.toString().trim()
+            val jenisKelamin = etJenisKelamin.text.toString().trim()
+
+            if (nama.isEmpty() || usiaText.isEmpty() || jenisKelamin.isEmpty()) {
+                Toast.makeText(this, "Isi semua data!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val usia = usiaText.toIntOrNull()
+            if (usia == null) {
+                etUsia.error = "Usia harus angka"
+                return@setOnClickListener
+            }
+
+            CoroutineScope(Dispatchers.IO).launch {
+                biodataDao.insert(EntityBiodata(nama = nama, usia = usia, jenisKelamin = jenisKelamin))
+
+                runOnUiThread {
+                    Toast.makeText(this@FormActivity, "Data disimpan!", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
-    }
-
-    private fun validateForm() {
-        val nama = etNama.text.toString().trim()
-        val usia = etUsia.text.toString().trim()
-        val jenisKelamin = etJenisKelamin.text.toString().trim()
-
-        if (nama.isEmpty()) {
-            etNama.error = "Nama harus diisi"
-            return
-        }
-
-        if (!nama.matches(Regex("^[a-zA-Z ]+$"))) {
-            etNama.error = "Nama hanya huruf"
-            return
-        }
-
-        if (usia.isEmpty()) {
-            etUsia.error = "Usia harus diisi"
-            return
-        }
-
-        if (!usia.matches(Regex("^[0-9]{1,2}$"))) {
-            etUsia.error = "Usia hanya angka 1-99"
-            return
-        }
-
-        if (jenisKelamin.isEmpty()) {
-            etJenisKelamin.error = "Jenis kelamin harus diisi"
-            return
-        }
-
-        Toast.makeText(this, "Biodata berhasil disimpan!", Toast.LENGTH_SHORT).show()
     }
 }
