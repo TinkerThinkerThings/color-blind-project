@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spectra">
         <activity
+            android:name=".UI.menu.MenuOptionActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.form.FormActivity"
             android:exported="false" />
         <activity

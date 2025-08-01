@@ -8,7 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.colorblind.spectra.R
+import com.colorblind.spectra.UI.menu.MenuOptionActivity
 import com.colorblind.spectra.UI.slider.SliderActivity
+import com.colorblind.spectra.data.lokal.room.AppDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,11 +33,25 @@ class SplashActivity : AppCompatActivity() {
                     .alpha(1f)
                     .setDuration(1000)
                     .withEndAction {
-                        // Setelah selesai semua, delay 1 detik lalu masuk MainActivity
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            startActivity(Intent(this, SliderActivity::class.java))
-                            finish()
-                        }, 1000)
+                        // Jalankan pengecekan Room di thread IO
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val db = AppDatabase.getInstance(this@SplashActivity)
+                            val biodataList = db.biodataDao().getAll()
+
+                            val nextActivity = if (biodataList.isNotEmpty()) {
+                                // Sudah ada data → langsung ke MenuOptionActivity
+                                MenuOptionActivity::class.java
+                            } else {
+                                // Belum ada data → jalankan onboarding Slider
+                                SliderActivity::class.java
+                            }
+
+                            // Pindah activity di UI thread
+                            Handler(Looper.getMainLooper()).post {
+                                startActivity(Intent(this@SplashActivity, nextActivity))
+                                finish()
+                            }
+                        }
                     }
                     .start()
             }
