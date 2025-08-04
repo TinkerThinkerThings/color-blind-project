@@ -20,7 +20,7 @@
         android:layout_marginBottom="80dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Get Started"
+        android:text="@string/button_get_started"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:visibility="invisible"

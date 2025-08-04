@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spectra">
         <activity
+            android:name=".UI.menu.MenuPetunjukActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.menu.MenuProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.test.IsharaTestActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.menu.MenuOptionActivity"
             android:exported="false" />
         <activity

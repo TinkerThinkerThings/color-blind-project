@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Bgcolor"
+    android:background="@color/mainColor"
     android:padding="24dp">
 
     <!-- Logo -->
@@ -21,12 +21,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/logoImage"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
-        android:text="SPECTRA"
+        android:text="@string/splahsscreen"
         android:textSize="40sp"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
+        android:fontFamily="@font/poppins"
         android:alpha="0" />
 
 </RelativeLayout>

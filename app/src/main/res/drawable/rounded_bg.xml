@@ -3,7 +3,7 @@
     android:shape="rectangle">
 
     <!-- Warna latar belakang -->
-    <solid android:color="#99FFFFFF" />
+    <solid android:color="#FAF9EE" />
 
     <!-- Radius hanya di atas kiri & kanan -->
     <corners
