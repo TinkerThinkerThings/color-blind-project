@@ -26,7 +26,7 @@
     <!-- Box Petunjuk -->
     <LinearLayout
         android:id="@+id/instructionContainer"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="550dp"
         android:orientation="vertical"
         android:background="@drawable/rounded_instruction_bg"
