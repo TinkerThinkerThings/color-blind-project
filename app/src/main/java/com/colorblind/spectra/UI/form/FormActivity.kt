@@ -8,6 +8,7 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.colorblind.spectra.R
+import com.colorblind.spectra.UI.menu.MenuDirectionActivity
 import com.colorblind.spectra.UI.menu.MenuOptionActivity
 import com.colorblind.spectra.data.lokal.entity.EntityBiodata
 import com.colorblind.spectra.data.lokal.room.AppDatabase
@@ -84,7 +85,7 @@ class FormActivity : AppCompatActivity() {
                 runOnUiThread {
                     Toast.makeText(this@FormActivity, "Data disimpan!", Toast.LENGTH_SHORT).show()
                     // Pindah ke MenuOptionActivity setelah simpan
-                    val intent = Intent(this@FormActivity, MenuOptionActivity::class.java)
+                    val intent = Intent(this@FormActivity, MenuDirectionActivity::class.java)
                     startActivity(intent)
                     finish() // Tutup FormActivity biar tidak bisa kembali
                 }

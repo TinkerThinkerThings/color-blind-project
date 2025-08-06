@@ -35,20 +35,20 @@ class MenuOptionActivity : AppCompatActivity() {
             val biodata = biodataDao.getLatest()
             val nama = biodata?.nama ?: "User"
             withContext(Dispatchers.Main) {
-                tvWelcome.text = "Welcome, $nama"
+                tvWelcome.text = "Selamat Datang, $nama"
             }
         }
 
         menuProfile.setOnClickListener {
-            startActivity(Intent(this, FormActivity::class.java))
+            startActivity(Intent(this, MenuProfileActivity::class.java))
         }
 
-//        menuKoreksi.setOnClickListener {
-//            startActivity(Intent(this, KoreksiWarnaActivity::class.java))
-//        }
-//
-//        menuRealtime.setOnClickListener {
-//            startActivity(Intent(this, RealtimeProcessingActivity::class.java))
-//        }
+        menuKoreksi.setOnClickListener {
+            startActivity(Intent(this, MenuColorCorrectionActivity::class.java))
+        }
+
+        menuRealtime.setOnClickListener {
+            startActivity(Intent(this, MenuProcessingActivity::class.java))
+        }
     }
 }

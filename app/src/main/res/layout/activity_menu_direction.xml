@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorhead"
+    tools:context=".UI.menu.MenuDirectionActivity">
+
+    <!-- Judul -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PETUNJUK TES ISHIHARA"
+        android:textColor="#464D7E"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Box Petunjuk -->
+    <LinearLayout
+        android:id="@+id/instructionContainer"
+        android:layout_width="0dp"
+        android:layout_height="550dp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_instruction_bg"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Tes ini bertujuan untuk mengetahui apakah Anda memiliki buta warna parsial dengan jenis tertentu atau tidak"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. Akan ada 11 gambar yang ditampilkan satu per satu.\n2. Di setiap gambar, Anda diminta untuk mengetik angka yang terlihat dalam lingkaran berwarna (Gunakan angka, bukan huruf).\n3. Jika Anda tidak melihat angka apapun, Anda dapat mengetik “-” dan melanjutkan pada soal berikutnya."
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins"/>
+
+        <!-- Contoh gambar + keterangan -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/bgdirection"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:layout_marginTop="60dp"
+            android:weightSum="3">
+
+            <!-- Contoh 1 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:src="@drawable/sample"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="“Nol”"
+                    android:textColor="@color/mainColor"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins"/>
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_close"
+                    android:layout_marginTop="2dp"/>
+            </LinearLayout>
+
+            <!-- Contoh 2 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:src="@drawable/sample"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="“0”"
+                    android:textColor="@color/mainColor"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins"/>
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_check"
+                    android:layout_marginTop="2dp"/>
+            </LinearLayout>
+
+            <!-- Contoh 3 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:src="@drawable/sample"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="“-”"
+                    android:textStyle="bold"
+                    android:textColor="@color/mainColor"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/poppins"/>
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_check"
+                    android:layout_marginTop="2dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Tombol Mulai -->
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnStart"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:fontFamily="@font/poppins"
+        android:text="Mulai"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:backgroundTint="#6771A8"
+        app:cornerRadius="24dp"
+        app:icon="@drawable/ic_arrow"
+        app:iconGravity="textEnd"
+        app:iconPadding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instructionContainer"
+        app:layout_constraintVertical_bias="0.518" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="67dp"
+        android:layout_height="69dp"
+        android:layout_marginBottom="16dp"
+        android:indeterminateTint="@color/mainColor"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/btnStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instructionContainer"
+        app:layout_constraintVertical_bias="0.488" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

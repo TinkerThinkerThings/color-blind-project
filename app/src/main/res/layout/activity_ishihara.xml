@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainColor"
+    android:padding="16dp">
+
+    <!-- Nomor Plate -->
+    <TextView
+        android:id="@+id/textPlateNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plate 1"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"/>
+
+    <!-- Gambar Plate -->
+    <ImageView
+        android:id="@+id/imagePlate"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:scaleType="fitCenter"
+        android:background="@drawable/roundedbg"
+        android:padding="8dp"
+        android:contentDescription="Ishihara Plate"
+        app:layout_constraintTop_toBottomOf="@id/textPlateNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Pertanyaan -->
+    <TextView
+        android:id="@+id/textQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Angka berapa yang Anda lihat?"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins"
+        app:layout_constraintTop_toBottomOf="@id/imagePlate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"/>
+
+    <!-- Input Jawaban -->
+    <EditText
+        android:id="@+id/editAnswer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="“100” atau jika tidak ada “-”"
+        android:background="@drawable/editttext_background"
+        android:padding="12dp"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textColorHint="#808080"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@id/textQuestion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Tombol Selanjutnya -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="132dp"
+        android:text="Selanjutnya"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins"
+        app:iconGravity="textEnd"
+        app:iconPadding="8dp"
+        app:cornerRadius="20dp"
+        app:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editAnswer"
+        app:layout_constraintHorizontal_bias="0.497" />
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/imagePlate"
+        app:layout_constraintEnd_toEndOf="@+id/imagePlate"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="@+id/imagePlate"
+        app:layout_constraintTop_toBottomOf="@+id/textPlateNumber"
+        app:layout_constraintVertical_bias="0.539" />
+</androidx.constraintlayout.widget.ConstraintLayout>

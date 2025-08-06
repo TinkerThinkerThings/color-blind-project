@@ -12,13 +12,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spectra">
         <activity
-            android:name=".UI.menu.MenuPetunjukActivity"
+            android:name=".UI.quiz.ResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.menu.MenuProcessingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.menu.MenuColorCorrectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.quiz.IshiharaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.menu.MenuDirectionActivity"
             android:exported="false" />
         <activity
             android:name=".UI.menu.MenuProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".UI.test.IsharaTestActivity"
             android:exported="false" />
         <activity
             android:name=".UI.menu.MenuOptionActivity"

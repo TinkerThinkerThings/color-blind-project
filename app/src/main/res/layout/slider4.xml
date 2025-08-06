@@ -14,9 +14,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#B3000000" /> <!-- #66 = alpha 40% -->
+        android:background="#B3000000" />
 
-    <!-- Konten teks -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -27,9 +26,10 @@
             android:id="@+id/tv_slide4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="100dp"
             android:gravity="center"
-            android:text="Explore"
+            android:textStyle="bold"
+            android:text="See the World"
             android:textColor="@color/white"
             android:textSize="30sp" />
 
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:gravity="center"
-            android:text="Your Dream"
+            android:text="Live in Full Color"
             android:textColor="@color/white"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -46,21 +46,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
-            android:text="Destinations"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="340dp"
+            android:layout_marginTop="250dp"
             android:layout_marginStart="40dp"
             android:layout_marginEnd="40dp"
             android:gravity="center"
-            android:text="Discover your next great adventure, find new experiences, and create lasting memories."
+            android:fontFamily="@font/poppins"
+            android:text="Simply point your camera at anything and watch the world transform. No delays, no pictures needed, just seamless. Real-time color correction."
             android:textColor="@color/white"
             android:textSize="16sp"/>
     </LinearLayout>

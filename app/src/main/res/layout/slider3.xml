@@ -27,9 +27,10 @@
             android:id="@+id/tv_slide3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="100dp"
             android:gravity="center"
-            android:text="Explore"
+            android:text="Experience True"
+            android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="30sp" />
 
@@ -38,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:gravity="center"
-            android:text="Your Dream"
+            android:text="Colors, Instantly"
             android:textColor="@color/white"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -46,21 +47,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
-            android:text="Destinations"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="340dp"
+            android:layout_marginTop="300dp"
             android:layout_marginStart="40dp"
             android:layout_marginEnd="40dp"
             android:gravity="center"
-            android:text="Discover your next great adventure, find new experiences, and create lasting memories."
+            android:fontFamily="@font/poppins"
+            android:text="Our smart algorithm enhances your vision by adjusting confusing colors in real-time, making them clear, distinct and easy to identify."
             android:textColor="@color/white"
             android:textSize="16sp"/>
     </LinearLayout>

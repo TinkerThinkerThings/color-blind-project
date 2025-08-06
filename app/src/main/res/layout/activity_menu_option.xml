@@ -21,17 +21,16 @@
         android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:text="Welcome, Nama"
-        android:textColor="@color/mainColor"
-        android:textSize="28sp"
+        android:layout_marginTop="84dp"
+        android:text="Selamat datang, Nama"
+        android:textColor="@color/colorhead"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.175"
+        app:layout_constraintHorizontal_bias="0.13"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Contoh untuk Profile Pengguna -->
     <TextView
         android:id="@+id/tvPilihMenu"
         android:layout_width="wrap_content"
@@ -147,6 +146,5 @@
             android:textColor="@color/white"
             android:textSize="12sp" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
