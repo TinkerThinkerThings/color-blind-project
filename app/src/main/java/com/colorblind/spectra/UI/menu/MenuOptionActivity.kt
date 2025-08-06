@@ -44,11 +44,11 @@ class MenuOptionActivity : AppCompatActivity() {
         }
 
         menuKoreksi.setOnClickListener {
-            startActivity(Intent(this, MenuColorCorrectionActivity::class.java))
+            startActivity(Intent(this, ColorCorrectionDirectionActivity::class.java))
         }
 
         menuRealtime.setOnClickListener {
-            startActivity(Intent(this, MenuProcessingActivity::class.java))
+            startActivity(Intent(this, RealtimeProcessDirectionActivity::class.java))
         }
     }
 }

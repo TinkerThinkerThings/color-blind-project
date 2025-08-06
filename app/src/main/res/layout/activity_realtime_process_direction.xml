@@ -2,19 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F9D7"
-    android:id="@+id/main"
-    tools:context=".UI.menu.ColorCorrectionDirectionActivity">
-
+    tools:context=".UI.menu.RealtimeProcessDirectionActivity">
     <TextView
         android:id="@+id/textTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="KOREKSI WARNA"
+        android:text="REAL-TIME PROCESSING"
         android:textColor="@color/mainColor"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -28,7 +27,7 @@
         android:fontFamily="@font/poppins"
         android:gravity="center"
         android:layout_marginTop="9dp"
-        android:text="Optimalkan tampilan warna sesuai kebutuhan penglihatan Anda"
+        android:text="Lihat dunia dengan tampilan warna yang telah disesuaikan, secara langsung"
         android:textColor="@color/mainColor"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@+id/textTitle"
@@ -41,7 +40,7 @@
         android:clipToOutline="true"
         android:elevation="4dp"
         android:orientation="vertical"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="90dp"
         android:padding="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textTitle">
@@ -53,7 +52,7 @@
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/poppins"
             android:justificationMode="inter_word"
-            android:text="Fitur ini akan membantu Anda melihat gambar dengan lebih nyaman. Algoritma koreksi warna akan otomatis memproses gambar sesuai persepsi buta warna parsial Anda."
+            android:text="Dengan fitur ini, kamera Anda akan memproses tampilan secara real-time dan menyesuaikan warna sesuai jenis gangguan penglihatan warna yang dialami."
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
 
@@ -76,7 +75,7 @@
                 <TextView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/ic_circle"
                     android:gravity="center"
                     android:text="1"
@@ -91,7 +90,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins"
                     android:justificationMode="inter_word"
-                    android:text="Pilih gambar dari galeri Anda atau ambil gambar baru dengan kamera"
+                    android:text="Mulai stream untuk memulai pemrosesan"
                     android:textColor="#475B9E"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -123,7 +122,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins"
                     android:justificationMode="inter_word"
-                    android:text="Sistem akan memproses warna dan menyesuaikannya otomatis"
+                    android:text="Arahkan kamera pada objek yang ingin dilihat"
                     android:textColor="#475B9E"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -139,7 +138,7 @@
                 <TextView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="1dp"
                     android:background="@drawable/ic_circle"
                     android:gravity="center"
                     android:text="3"
@@ -154,22 +153,12 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins"
                     android:justificationMode="inter_word"
-                    android:text="Hasil akhir akan ditampilkan dengan koreksi warna sesuai kebutuhan visual Anda."
+                    android:text="Warna yang tertangkap akan langsung dikoreksi oleh sistem."
                     android:textColor="#475B9E"
                     android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Disclaimer -->
-        <TextView
-            android:id="@+id/textDisclaimer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins"
-            android:gravity="center"
-            android:text="⚠️ Fitur ini tidak menggantikan diagnosis profesional.\nUntuk pemeriksaan lebih lanjut, silakan konsultasi ke tenaga ahli spesialis."
-            android:textColor="#FFFFFF"
-            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -191,13 +180,13 @@
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
-        android:layout_width="37dp"
-        android:layout_height="43dp"
+        android:layout_width="49dp"
+        android:layout_height="63dp"
         android:indeterminateTint="@color/mainColor"
-        android:visibility="gone"
+        android:visibility="gne"
         app:layout_constraintBottom_toTopOf="@+id/buttonStart"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/containerContent" />
+        app:layout_constraintTop_toBottomOf="@+id/containerContent"
+        app:layout_constraintVertical_bias="0.904" />
 </androidx.constraintlayout.widget.ConstraintLayout>

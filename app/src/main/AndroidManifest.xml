@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spectra">
         <activity
+            android:name=".UI.menu.RealtimeProcessDirectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.menu.ColorCorrectionDirectionActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.quiz.ResultActivity"
             android:exported="false" />
         <activity
