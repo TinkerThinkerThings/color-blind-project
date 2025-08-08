@@ -183,7 +183,7 @@
         android:layout_width="49dp"
         android:layout_height="63dp"
         android:indeterminateTint="@color/mainColor"
-        android:visibility="gne"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/buttonStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

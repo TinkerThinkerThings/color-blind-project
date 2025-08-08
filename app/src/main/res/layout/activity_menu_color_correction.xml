@@ -73,6 +73,7 @@
       android:layout_height="120dp"
       android:orientation="vertical"
       android:gravity="center"
+      android:layout_marginTop="40dp"
       android:background="@drawable/bg_menutext"
       app:layout_constraintTop_toBottomOf="@id/textView2"
       app:layout_constraintStart_toStartOf="parent"

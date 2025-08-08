@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id ("kotlin-kapt")
+    id("com.google.devtools.ksp") version "1.9.23-1.0.20"
     id("kotlin-parcelize")
 }
 
@@ -57,7 +57,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     // Room components
     implementation ("androidx.room:room-runtime:2.7.2")
-    kapt ("androidx.room:room-compiler:2.7.2")
-    // coroutine support
     implementation ("androidx.room:room-ktx:2.7.2")
+    ksp ("androidx.room:room-compiler:2.7.2")
 }
+
+private fun DependencyHandlerScope.ksp(string: String) {}
