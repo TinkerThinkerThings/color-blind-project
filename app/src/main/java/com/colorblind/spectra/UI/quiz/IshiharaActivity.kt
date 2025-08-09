@@ -2,14 +2,15 @@ package com.colorblind.spectra.UI.quiz
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.colorblind.spectra.R
-import com.colorblind.spectra.UI.menu.MenuOptionActivity
 import com.colorblind.spectra.data.lokal.room.AppDatabase
-import com.google.android.material.button.MaterialButton
+import com.colorblind.spectra.data.model.Answer
+import com.colorblind.spectra.data.model.Question
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,75 +18,115 @@ import kotlinx.coroutines.withContext
 
 class IshiharaActivity : AppCompatActivity() {
 
+    private enum class Phase { SCREENING, CLASSIFICATION }
+
+    // State
+    private var phase: Phase = Phase.SCREENING
+    private lateinit var questions: MutableList<Question>
+    private var currentIndex = 0
+    private val answers = mutableListOf<Answer>()
+
+    // Skor kumulatif
+    private var skorNormal = 0
+    private var skorDefisiensi = 0
+    private var totalSkorDeutan = 0
+    private var totalSkorProtan = 0
+
+    // View
     private lateinit var textPlateNumber: TextView
     private lateinit var imagePlate: ImageView
     private lateinit var editAnswer: EditText
-    private lateinit var buttonNext: MaterialButton
+    private lateinit var buttonNext: Button
     private lateinit var progressBar: ProgressBar
-
-    private val questions = listOf(
-        R.drawable.plate1,
-        R.drawable.plate2,
-        R.drawable.plate5,
-        R.drawable.plate7,
-        R.drawable.plate10,
-        R.drawable.plate16,
-        R.drawable.plate18,
-        R.drawable.plate22,
-        R.drawable.plate23,
-        R.drawable.plate24,
-        R.drawable.plate25
-    )
-
-    private val answerKeys = listOf("12", "8", "57", "3", "2", "16", "5", "26", "42", "35", "96")
-
-    private var currentIndex = 0
-    private val answers = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ishihara)
 
-        // Inisialisasi view
         textPlateNumber = findViewById(R.id.textPlateNumber)
-        imagePlate = findViewById(R.id.imagePlate)
-        editAnswer = findViewById(R.id.editAnswer)
-        buttonNext = findViewById(R.id.buttonNext)
-        progressBar = findViewById(R.id.progressBar)
+        imagePlate      = findViewById(R.id.imagePlate)
+        editAnswer      = findViewById(R.id.editAnswer)
+        buttonNext      = findViewById(R.id.buttonNext)
+        progressBar     = findViewById(R.id.progressBar)
 
-        // Tampilkan pertanyaan pertama
+        // Mulai hanya dengan plate SCREENING
+        questions = getScreeningQuestions().toMutableList()
+
         showQuestion(currentIndex)
 
         buttonNext.setOnClickListener {
-            val answer = editAnswer.text.toString().trim()
-
-            if (answer.isEmpty()) {
+            val input = editAnswer.text.toString().trim()
+            if (input.isEmpty()) {
                 editAnswer.error = "Jawaban tidak boleh kosong"
                 return@setOnClickListener
             }
 
             // Simpan jawaban
-            answers.add(answer)
+            val q = questions[currentIndex]
+            answers.add(Answer(q, input))
 
-            if (currentIndex < questions.lastIndex) {
-                // Maju ke soal berikutnya
-                currentIndex++
+            // Update skor sesuai fase & plate
+            if (phase == Phase.SCREENING) {
+                updateScreeningScore(q.imageResId, input)
+            } else {
+                updateClassificationScore(q.imageResId, input, q.correctAnswer)
+            }
+
+            // Lanjut
+            currentIndex++
+
+            if (currentIndex < questions.size) {
                 showLoadingThenNextQuestion()
             } else {
-                // Selesai → proses hasil
-                processResult()
+                // Jika fase screening selesai, tentukan apakah perlu klasifikasi
+                if (phase == Phase.SCREENING) {
+                    if (skorNormal > skorDefisiensi) {
+                        // Normal dominan → langsung hasil
+                        processResult()
+                    } else {
+                        // Defisiensi ≥ Normal → tambahkan plate klasifikasi dan lanjut
+                        phase = Phase.CLASSIFICATION
+                        questions.addAll(getClassificationQuestions())
+                        showLoadingThenNextQuestion()
+                    }
+                } else {
+                    // Fase klasifikasi selesai → hasil akhir
+                    processResult()
+                }
             }
         }
     }
 
+    /* ------------ Daftar pertanyaan ------------ */
+
+    private fun getScreeningQuestions(): List<Question> = listOf(
+        Question(R.drawable.plate1,  "12"), // Kontrol
+        Question(R.drawable.plate2,  "8"),  // Transformasi
+        Question(R.drawable.plate5,  "57"), // Transformasi
+        Question(R.drawable.plate7,  "3"),  // Transformasi
+        Question(R.drawable.plate10, "2"),  // Menghilang
+        Question(R.drawable.plate16, "16"), // Menghilang
+        Question(R.drawable.plate18, "-")   // Tersembunyi (jawaban 5 = defisiensi)
+    )
+
+    private fun getClassificationQuestions(): List<Question> = listOf(
+        Question(R.drawable.plate22, "26"),
+        Question(R.drawable.plate23, "42"),
+        Question(R.drawable.plate24, "35"),
+        Question(R.drawable.plate25, "96")
+    )
+
+    /* ------------ UI helpers ------------ */
+
     private fun showQuestion(index: Int) {
+        val q = questions[index]
         textPlateNumber.text = "Plate ${index + 1}"
-        imagePlate.setImageResource(questions[index])
+        imagePlate.setImageResource(q.imageResId)
         editAnswer.text.clear()
         editAnswer.requestFocus()
     }
 
-    private fun showLoadingThenNextQuestion() {
+    private fun showLoadingThenNextQuestion(resetIndex: Boolean = false) {
         progressBar.visibility = View.VISIBLE
         buttonNext.isEnabled = false
 
@@ -93,18 +134,128 @@ class IshiharaActivity : AppCompatActivity() {
             delay(400)
             progressBar.visibility = View.GONE
             buttonNext.isEnabled = true
+            if (resetIndex) currentIndex = 0
             showQuestion(currentIndex)
         }
     }
 
+    /* ------------ Scoring ------------ */
+
+    private fun updateScreeningScore(plateId: Int, input: String) {
+        when (plateId) {
+            R.drawable.plate1 -> { // Kontrol
+                if (input == "12") skorNormal++ else skorDefisiensi++
+            }
+            R.drawable.plate2 -> { // Transformasi (Normal: 8, Defisiensi Spesifik: 3)
+                if (input == "8") {
+                    skorNormal++
+                } else if (input == "3") {
+                    skorDefisiensi++
+                }
+            }
+            R.drawable.plate5 -> { // Transformasi (Normal: 57, Defisiensi Spesifik: 35)
+                if (input == "57") {
+                    skorNormal++
+                } else if (input == "35") {
+                    skorDefisiensi++
+                }
+            }
+            R.drawable.plate7 -> { // Transformasi (Normal: 3, Defisiensi Spesifik: 5)
+                if (input == "3") {
+                    skorNormal++
+                } else if (input == "5") {
+                    skorDefisiensi++
+                }
+            }
+            R.drawable.plate10 -> { // Menghilang
+                if (input == "2") skorNormal++ else skorDefisiensi++
+            }
+            R.drawable.plate16 -> { // Menghilang
+                if (input == "16") skorNormal++ else skorDefisiensi++
+            }
+            R.drawable.plate18 -> { // Tersembunyi
+                if (input == "-") skorNormal++ else skorDefisiensi++
+            }
+        }
+        Log.d(
+            "ISHIHARA_DEBUG",
+            "SCREENING | PlateID: $plateId | Jawaban: $input | SkorNormal: $skorNormal | SkorDefisiensi: $skorDefisiensi"
+        )
+    }
+
+    private fun updateClassificationScore(plateId: Int, input: String, correct: String) {
+        // Jika pengguna menjawab dengan benar (penglihatan normal), tambah skorNormal dan keluar.
+        if (input == correct) {
+            skorNormal++
+            return
+        }
+
+        var isDeficiencyDetected = false
+
+        // Logika klasifikasi baru berdasarkan input spesifik dari pengguna
+        when (plateId) {
+            R.drawable.plate22 -> { // Normal: 26
+                if (input == "6") {
+                    totalSkorProtan++
+                    isDeficiencyDetected = true
+                } else if (input == "2") {
+                    totalSkorDeutan++
+                    isDeficiencyDetected = true
+                }
+            }
+            R.drawable.plate23 -> { // Normal: 42
+                if (input == "2") {
+                    totalSkorProtan++
+                    isDeficiencyDetected = true
+                } else if (input == "4") {
+                    totalSkorDeutan++
+                    isDeficiencyDetected = true
+                }
+            }
+            R.drawable.plate24 -> { // Normal: 35
+                if (input == "5") {
+                    totalSkorProtan++
+                    isDeficiencyDetected = true
+                } else if (input == "3") {
+                    totalSkorDeutan++
+                    isDeficiencyDetected = true
+                }
+            }
+            R.drawable.plate25 -> { // Normal: 96
+                if (input == "6") {
+                    totalSkorProtan++
+                    isDeficiencyDetected = true
+                } else if (input == "9") {
+                    totalSkorDeutan++
+                    isDeficiencyDetected = true
+                }
+            }
+        }
+
+        // Hanya tambah skor defisiensi jika salah satu jawaban spesifik terdeteksi.
+        if (isDeficiencyDetected) {
+            skorDefisiensi++
+        }
+
+        Log.d(
+            "ISHIHARA_DEBUG",
+            "CLASSIFICATION | PlateID: $plateId | Jawaban: $input | JawabanBenar: $correct | " +
+                    "SkorNormal: $skorNormal | SkorDefisiensi: $skorDefisiensi | Protan: $totalSkorProtan | Deutan: $totalSkorDeutan"
+        )
+    }
+
+    /* ------------ Hasil ------------ */
+
     private fun processResult() {
-        val correctCount = answers.zip(answerKeys).count { (user, key) -> user == key }
-        val resultType = getColorBlindnessType(correctCount)
+        val resultType = getColorBlindnessType(
+            skorNormal, skorDefisiensi, totalSkorDeutan, totalSkorProtan
+        )
+
+        val correctCount = answers.count { it.answer == it.question.correctAnswer }
 
         lifecycleScope.launch(Dispatchers.IO) {
             val db = AppDatabase.getInstance(applicationContext)
             val latest = db.biodataDao().getLatest()
-
             if (latest != null) {
                 val updated = latest.copy(
                     isIshiharaDone = true,
@@ -116,18 +267,23 @@ class IshiharaActivity : AppCompatActivity() {
 
             withContext(Dispatchers.Main) {
                 val intent = Intent(this@IshiharaActivity, ResultActivity::class.java)
+                intent.putExtra("RESULT_TYPE", resultType)
                 startActivity(intent)
                 finish()
             }
         }
     }
 
-    private fun getColorBlindnessType(score: Int): String {
-        return when {
-            score >= 9 -> "Normal"
-            score in 5..8 -> "Deuteranopia / Protanopia ringan"
-            score in 3..4 -> "Deuteranopia / Protanopia sedang"
-            else -> "Deuteranopia / Protanopia parah"
+    private fun getColorBlindnessType(
+        skorNormal: Int,
+        skorDefisiensi: Int,
+        totalSkorDeutan: Int,
+        totalSkorProtan: Int
+    ): String {
+        return if (skorNormal > skorDefisiensi) {
+            "Normal"
+        } else {
+            if (totalSkorDeutan > totalSkorProtan) "Deuteranopia" else "Protanopia"
         }
     }
 }
