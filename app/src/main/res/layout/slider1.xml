@@ -67,7 +67,7 @@
             android:fontFamily="@font/poppins"
             android:text="Designed for the color blind, this application helps you see and distinguish the rich spectrum of colors around you like never before."
             android:textColor="@color/white"
-            android:textSize="16sp"/>
+            android:textSize="18sp"/>
     </LinearLayout>
 
 </FrameLayout>

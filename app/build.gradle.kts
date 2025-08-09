@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.devtools.ksp") version "1.9.23-1.0.20"
+    id("com.google.devtools.ksp") version "2.0.21-1.0.25"
     id("kotlin-parcelize")
 }
 
@@ -56,9 +56,7 @@ dependencies {
     implementation("com.tbuonomo:dotsindicator:5.1.0")
     androidTestImplementation(libs.androidx.espresso.core)
     // Room components
-    implementation ("androidx.room:room-runtime:2.7.2")
-    implementation ("androidx.room:room-ktx:2.7.2")
-    ksp ("androidx.room:room-compiler:2.7.2")
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 }
-
-private fun DependencyHandlerScope.ksp(string: String) {}

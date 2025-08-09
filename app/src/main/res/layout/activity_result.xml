@@ -58,7 +58,7 @@
                     android:text="Skor"
                     android:layout_marginTop="20dp"
                     android:textColor="@color/yellow"
-                    android:textSize="23sp"
+                    android:textSize="26sp"
                     android:textStyle="bold"/>
 
                 <TextView
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="25sp"
                     android:textStyle="bold"
                     android:layout_marginTop="4dp"/>
             </LinearLayout>
@@ -89,7 +89,7 @@
                     android:layout_marginTop="20dp"
                     android:text="Klasifikasi"
                     android:textColor="@color/yellow"
-                    android:textSize="22sp"
+                    android:textSize="26sp"
                     android:textStyle="bold"/>
 
                 <TextView
@@ -99,7 +99,7 @@
                     android:text="Normal"
                     android:layout_gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="25sp"
                     android:textStyle="bold"
                     android:layout_marginTop="4dp"/>
             </LinearLayout>

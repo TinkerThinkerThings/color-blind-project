@@ -62,7 +62,7 @@
             android:fontFamily="@font/poppins"
             android:text="Take a quick and simple test to help us understand your specific type of color vision defieciency. This ensures the color correction is perfectly tailored for you."
             android:textColor="@color/white"
-            android:textSize="16sp"/>
+            android:textSize="18sp"/>
     </LinearLayout>
 
 </FrameLayout>

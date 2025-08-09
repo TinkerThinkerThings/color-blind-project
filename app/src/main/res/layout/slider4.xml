@@ -53,7 +53,7 @@
             android:fontFamily="@font/poppins"
             android:text="Simply point your camera at anything and watch the world transform. No delays, no pictures needed, just seamless. Real-time color correction."
             android:textColor="@color/white"
-            android:textSize="16sp"/>
+            android:textSize="18sp"/>
     </LinearLayout>
 
 </FrameLayout>

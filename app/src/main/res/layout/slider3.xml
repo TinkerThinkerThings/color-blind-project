@@ -54,7 +54,7 @@
             android:fontFamily="@font/poppins"
             android:text="Our smart algorithm enhances your vision by adjusting confusing colors in real-time, making them clear, distinct and easy to identify."
             android:textColor="@color/white"
-            android:textSize="16sp"/>
+            android:textSize="18sp"/>
     </LinearLayout>
 
 </FrameLayout>

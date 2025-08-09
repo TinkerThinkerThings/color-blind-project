@@ -13,12 +13,12 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PETUNJUK TES ISHIHARA"
+        android:text="TES ISHIHARA"
         android:textColor="#464D7E"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:fontFamily="@font/poppins"
-        android:layout_marginTop="24dp"
+        android:fontFamily="@font/aleosbold"
+        android:layout_marginTop="45dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -27,7 +27,7 @@
     <LinearLayout
         android:id="@+id/instructionContainer"
         android:layout_width="wrap_content"
-        android:layout_height="550dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/rounded_instruction_bg"
         android:padding="16dp"
@@ -42,7 +42,8 @@
             android:layout_marginTop="20dp"
             android:text="Tes ini bertujuan untuk mengetahui apakah Anda memiliki buta warna parsial dengan jenis tertentu atau tidak"
             android:textColor="#FFFFFF"
-            android:textSize="16sp"
+            android:justificationMode="inter_word"
+            android:textSize="18sp"
             android:fontFamily="@font/poppins"/>
 
         <TextView
@@ -50,8 +51,10 @@
             android:layout_height="wrap_content"
             android:text="1. Akan ada 11 gambar yang ditampilkan satu per satu.\n2. Di setiap gambar, Anda diminta untuk mengetik angka yang terlihat dalam lingkaran berwarna (Gunakan angka, bukan huruf).\n3. Jika Anda tidak melihat angka apapun, Anda dapat mengetik “-” dan melanjutkan pada soal berikutnya."
             android:textColor="#FFFFFF"
-            android:textSize="16sp"
+            android:textSize="18sp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
+            android:justificationMode="inter_word"
             android:fontFamily="@font/poppins"/>
 
         <!-- Contoh gambar + keterangan -->
