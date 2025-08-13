@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <!-- Warna latar belakang konten dialog -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+        <!-- Aktifkan efek dim -->
+        <item name="android:backgroundDimEnabled">true</item>
+
+        <!-- Atur tingkat kegelapan (0.0 = tidak gelap, 1.0 = gelap total) -->
+        <item name="android:backgroundDimAmount">0.8</item>
+    </style>
+</resources>

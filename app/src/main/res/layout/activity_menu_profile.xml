@@ -5,6 +5,284 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/mainColor"
     tools:context=".UI.menu.MenuProfileActivity">
+
+    <!-- Judul -->
+    <TextView
+        android:id="@+id/tvProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:text="PROFILE"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Card Putih -->
+    <LinearLayout
+        android:id="@+id/cardContainer"
+        android:layout_width="0dp"
+        android:layout_height="600dp"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:elevation="4dp"
+        android:background="@drawable/editttext_background"
+        app:layout_constraintTop_toBottomOf="@id/tvProfile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Judul Data Pengguna -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DATA PENGGUNA"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"
+            android:textColor="#6F8DC4"
+            android:textSize="20sp"
+            android:gravity="center" />
+
+        <!-- Nama Lengkap -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Nama Lengkap"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#6F8DC4" />
+
+        <!-- Value Nama Lengkap -->
+        <TextView
+            android:id="@+id/tvNamaLengkap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@android:color/black" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#6F8DC4" />
+
+        <!-- Usia -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Usia"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#6F8DC4" />
+
+        <!-- Value Usia -->
+        <TextView
+            android:id="@+id/tvUsia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@android:color/black" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#6F8DC4" />
+
+        <!-- Jenis Kelamin -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Jenis Kelamin"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#6F8DC4" />
+
+        <!-- Value Jenis Kelamin -->
+        <TextView
+            android:id="@+id/tvJenisKelamin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@android:color/black" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#6F8DC4" />
+
+        <!-- Hasil Tes -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="HASIL TES"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="#6F8DC4" />
+
+        <!-- Skor Tes -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Normal"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppins"
+                    android:textStyle="bold"
+                    android:textColor="#6F8DC4" />
+
+                <TextView
+                    android:id="@+id/tvScoreNormal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="0"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="#6F8DC4" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Deuteranopia"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppins"
+                    android:textStyle="bold"
+                    android:textColor="#6F8DC4" />
+
+                <TextView
+                    android:id="@+id/tvScoreDeuteranopia"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="0"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="#6F8DC4" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Protanopia"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppins"
+                    android:textStyle="bold"
+                    android:textColor="#6F8DC4" />
+
+                <TextView
+                    android:id="@+id/tvScoreProtanopia"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="0"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="#6F8DC4" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <!-- Value Hasil Tes Final -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="18sp"
+            android:fontFamily="@font/poppins"
+            android:text="Halis Klasifikasi"
+            android:textColor="#6F8DC4"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvHasilTesFinal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@android:color/black" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#6F8DC4" />
+
+        <!-- Tombol Ulangi Tes -->
+        <LinearLayout
+            android:id="@+id/btnUlangiTes"
+            android:layout_width="200dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="40dp"
+            android:backgroundTint="#A9C6F9"
+            android:background="@drawable/button_rounded"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:elevation="4dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_restart" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Ulangi Tes"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

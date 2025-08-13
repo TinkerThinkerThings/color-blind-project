@@ -39,7 +39,6 @@
                 android:layout_marginTop="20dp"
                 android:textColor="@color/blue_dark"
                 android:layout_marginBottom="16dp"/>
-
             <!-- Score Container -->
             <LinearLayout
                 android:layout_width="300dp"
@@ -56,20 +55,87 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Skor"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="8dp"
                     android:textColor="@color/yellow"
                     android:textSize="26sp"
                     android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/textScore"
-                    android:layout_width="wrap_content"
+                <!-- 3 Data Skor -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="@color/white"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp"/>
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp">
+
+                    <!-- Baris 1 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/labelNormal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Normal"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"/>
+                        <TextView
+                            android:id="@+id/valueNormal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <!-- Baris 2 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/labelDeuteranopia"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Deuteranopia"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"/>
+                        <TextView
+                            android:id="@+id/valueDeuteranopia"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <!-- Baris 3 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/labelProtanopia"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Protanopia"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"/>
+                        <TextView
+                            android:id="@+id/valueProtanopia"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Classification Container -->

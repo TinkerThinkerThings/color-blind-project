@@ -243,9 +243,6 @@ class IshiharaActivity : AppCompatActivity() {
                     "SkorNormal: $skorNormal | SkorDefisiensi: $skorDefisiensi | Protan: $totalSkorProtan | Deutan: $totalSkorDeutan"
         )
     }
-
-    /* ------------ Hasil ------------ */
-
     private fun processResult() {
         val resultType = getColorBlindnessType(
             skorNormal, skorDefisiensi, totalSkorDeutan, totalSkorProtan
@@ -259,8 +256,11 @@ class IshiharaActivity : AppCompatActivity() {
             if (latest != null) {
                 val updated = latest.copy(
                     isIshiharaDone = true,
-                    score = correctCount,
-                    hasilTes = resultType
+                    score = correctCount, // total semua jawaban benar
+                    hasilTes = resultType,
+                    scoreNormal = skorNormal,
+                    scoreDeuteranopia = totalSkorDeutan,
+                    scoreProtanopia = totalSkorProtan
                 )
                 db.biodataDao().update(updated)
             }
@@ -268,6 +268,9 @@ class IshiharaActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 val intent = Intent(this@IshiharaActivity, ResultActivity::class.java)
                 intent.putExtra("RESULT_TYPE", resultType)
+                intent.putExtra("SCORE_NORMAL", skorNormal)
+                intent.putExtra("SCORE_DEUTERANOPIA", totalSkorDeutan)
+                intent.putExtra("SCORE_PROTANOPIA", totalSkorProtan)
                 startActivity(intent)
                 finish()
             }

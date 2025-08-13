@@ -15,7 +15,11 @@ data class EntityBiodata(
     val jenisKelamin: String,
     val isIshiharaDone: Boolean = false,
     val score: Int? = null,
-    val hasilTes: String? = null
+    val hasilTes: String? = null,
+    // Kolom baru untuk menyimpan skor tiap kategori
+    val scoreNormal: Int? = null,
+    val scoreDeuteranopia: Int? = null,
+    val scoreProtanopia: Int? = null
 ): Parcelable
 
 
