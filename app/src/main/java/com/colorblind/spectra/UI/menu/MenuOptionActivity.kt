@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 class MenuOptionActivity : AppCompatActivity() {
 
     private lateinit var tvWelcome: TextView
+    private lateinit var tvStatusButaWarna: TextView
     private lateinit var menuProfile: LinearLayout
     private lateinit var menuKoreksi: LinearLayout
     private lateinit var menuRealtime: LinearLayout
@@ -25,6 +26,7 @@ class MenuOptionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_menu_option)
 
         tvWelcome = findViewById(R.id.tvWelcome)
+        tvStatusButaWarna = findViewById(R.id.tvStatusButaWarna)
         menuProfile = findViewById(R.id.menuProfile)
         menuKoreksi = findViewById(R.id.menuKoreksi)
         menuRealtime = findViewById(R.id.menuRealtime)
@@ -34,13 +36,18 @@ class MenuOptionActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             val biodata = biodataDao.getLatest()
             val nama = biodata?.nama ?: "User"
+            val hasilTes = biodata?.hasilTes ?: "Belum melakukan tes"
+
             withContext(Dispatchers.Main) {
                 tvWelcome.text = "Selamat Datang, $nama"
+                tvStatusButaWarna.text = "Status buta warna : $hasilTes"
             }
         }
 
         menuProfile.setOnClickListener {
-            startActivity(Intent(this, MenuProfileActivity::class.java))
+            val intent = Intent(this, MenuProfileActivity::class.java)
+            intent.putExtra("fromMenuOption", true) // Tambah flag untuk loading
+            startActivity(intent)
         }
 
         menuKoreksi.setOnClickListener {
@@ -52,3 +59,4 @@ class MenuOptionActivity : AppCompatActivity() {
         }
     }
 }
+

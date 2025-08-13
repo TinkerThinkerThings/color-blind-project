@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center">
+
+    <!-- Card Popup -->
+    <LinearLayout
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_rounded"
+    android:orientation="vertical"
+        android:layout_gravity="center"
+    android:padding="20dp">
+
+    <!-- Icon Peringatan -->
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_warning" />
+
+    <!-- Judul -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="PERINGATAN"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Isi Pesan -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Ulangi Tes berarti akan menggantikan data lama Anda, termasuk skor dan hasil tes.\n\nData lama tidak dapat diakses kembali."
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <!-- Pertanyaan -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="Apakah Anda yakin?"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
+
+    <!-- Tombol -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Batal"
+            android:textColor="@android:color/white"
+            app:icon="@drawable/ic_close"
+            app:iconPadding="8dp"
+            app:iconTint="@android:color/white"
+            android:backgroundTint="@color/mainColor" />
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUlangi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ulangi"
+            android:textColor="@android:color/white"
+            app:icon="@drawable/ic_restart"
+            app:iconPadding="8dp"
+            app:iconTint="@android:color/white"
+            android:backgroundTint="@color/mainColor" />
+
+    </LinearLayout>
+</LinearLayout>
+</FrameLayout>

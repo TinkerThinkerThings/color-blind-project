@@ -8,29 +8,65 @@
     android:background="@color/mainColor"
     tools:context=".UI.menu.MenuOptionActivity">
 
-    <View
-        android:id="@+id/headerBackground"
+    <!-- Header background -->
+
+    <FrameLayout
+        android:id="@+id/headerContainer"
         android:layout_width="0dp"
         android:layout_height="400dp"
         android:background="@drawable/header_background"
+        android:clipToOutline="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Vector di dalam header -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/vector" />
+    </FrameLayout>
+    <View
+        android:id="@+id/headerbgup"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:background="@drawable/header_backgroundup"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
+    <!-- Selamat datang -->
+    <!-- Selamat Datang -->
     <TextView
         android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="16dp"
         android:text="Selamat datang, Nama"
         android:textColor="@color/colorhead"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.13"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Status Buta Warna -->
+    <TextView
+        android:id="@+id/tvStatusButaWarna"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="Status buta warna : "
+        android:textColor="@color/colorhead"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvWelcome" />
+
+    <!-- Tombol Pilih Menu -->
     <TextView
         android:id="@+id/tvPilihMenu"
         android:layout_width="wrap_content"
@@ -46,11 +82,11 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/headerBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@id/headerContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Menu Profile -->
     <LinearLayout
         android:id="@+id/menuProfile"
         android:layout_width="wrap_content"
@@ -70,7 +106,7 @@
             android:padding="20dp"
             android:src="@drawable/ic_profile"
             android:scaleType="centerInside"
-            android:elevation="4dp"/>
+            android:elevation="4dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -84,6 +120,7 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <!-- Menu Koreksi Warna -->
     <LinearLayout
         android:id="@+id/menuKoreksi"
         android:layout_width="wrap_content"
@@ -106,15 +143,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/koreksi_warna"
-            android:textSize="12sp"
-            android:textStyle="bold"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins"
-            android:textColor="@color/white"
             android:gravity="center"
-            android:layout_marginTop="8dp"/>
+            android:text="@string/koreksi_warna"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
+    <!-- Menu Real-Time Processing -->
     <LinearLayout
         android:id="@+id/menuRealtime"
         android:layout_width="wrap_content"
@@ -133,18 +171,18 @@
             android:padding="20dp"
             android:src="@drawable/ic_camera"
             android:scaleType="centerInside"
-            android:elevation="4dp"/>
+            android:elevation="4dp" />
 
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins"
-            android:textStyle="bold"
             android:gravity="center"
             android:text="@string/real_time_nprocessing"
             android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
