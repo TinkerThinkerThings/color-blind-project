@@ -49,9 +49,8 @@ class IshiharaActivity : AppCompatActivity() {
         buttonNext      = findViewById(R.id.buttonNext)
         progressBar     = findViewById(R.id.progressBar)
 
-        // Mulai hanya dengan plate SCREENING
+        // Mulai dengan plate screening
         questions = getScreeningQuestions().toMutableList()
-
         showQuestion(currentIndex)
 
         buttonNext.setOnClickListener {
@@ -61,37 +60,43 @@ class IshiharaActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Simpan jawaban
             val q = questions[currentIndex]
             answers.add(Answer(q, input))
 
-            // Update skor sesuai fase & plate
             if (phase == Phase.SCREENING) {
                 updateScreeningScore(q.imageResId, input)
             } else {
                 updateClassificationScore(q.imageResId, input, q.correctAnswer)
             }
 
-            // Lanjut
             currentIndex++
 
             if (currentIndex < questions.size) {
                 showLoadingThenNextQuestion()
             } else {
-                // Jika fase screening selesai, tentukan apakah perlu klasifikasi
                 if (phase == Phase.SCREENING) {
                     if (skorNormal > skorDefisiensi) {
-                        // Normal dominan → langsung hasil
                         processResult()
                     } else {
-                        // Defisiensi ≥ Normal → tambahkan plate klasifikasi dan lanjut
                         phase = Phase.CLASSIFICATION
-                        questions.addAll(getClassificationQuestions())
+                        questions.addAll(getClassificationQuestions()) // 22–24 saja
                         showLoadingThenNextQuestion()
                     }
                 } else {
-                    // Fase klasifikasi selesai → hasil akhir
-                    processResult()
+                    // Cek apakah baru selesai 22–24 dan belum ada 25
+                    val sudahAda25 = questions.any { it.imageResId == R.drawable.plate25 }
+                    if (!sudahAda25 && questions.any { it.imageResId == R.drawable.plate24 }) {
+                        if (totalSkorProtan == totalSkorDeutan) {
+                            // Tie → tambahkan plate 25
+                            questions.add(Question(R.drawable.plate25, "96"))
+                            showLoadingThenNextQuestion()
+                        } else {
+                            processResult()
+                        }
+                    } else {
+                        // Sudah termasuk plate 25 → hasil akhir
+                        processResult()
+                    }
                 }
             }
         }
@@ -100,20 +105,20 @@ class IshiharaActivity : AppCompatActivity() {
     /* ------------ Daftar pertanyaan ------------ */
 
     private fun getScreeningQuestions(): List<Question> = listOf(
-        Question(R.drawable.plate1,  "12"), // Kontrol
-        Question(R.drawable.plate2,  "8"),  // Transformasi
-        Question(R.drawable.plate5,  "57"), // Transformasi
-        Question(R.drawable.plate7,  "3"),  // Transformasi
-        Question(R.drawable.plate10, "2"),  // Menghilang
-        Question(R.drawable.plate16, "16"), // Menghilang
-        Question(R.drawable.plate18, "-")   // Tersembunyi (jawaban 5 = defisiensi)
+        Question(R.drawable.plate1,  "12"),
+        Question(R.drawable.plate2,  "8"),
+        Question(R.drawable.plate5,  "57"),
+        Question(R.drawable.plate7,  "3"),
+        Question(R.drawable.plate10, "2"),
+        Question(R.drawable.plate16, "16"),
+        Question(R.drawable.plate18, "-")
     )
 
     private fun getClassificationQuestions(): List<Question> = listOf(
         Question(R.drawable.plate22, "26"),
         Question(R.drawable.plate23, "42"),
-        Question(R.drawable.plate24, "35"),
-        Question(R.drawable.plate25, "96")
+        Question(R.drawable.plate24, "35")
+        // Plate 25 tidak langsung dimasukkan, hanya jika tie
     )
 
     /* ------------ UI helpers ------------ */
@@ -143,111 +148,55 @@ class IshiharaActivity : AppCompatActivity() {
 
     private fun updateScreeningScore(plateId: Int, input: String) {
         when (plateId) {
-            R.drawable.plate1 -> { // Kontrol
-                if (input == "12") skorNormal++ else skorDefisiensi++
-            }
-            R.drawable.plate2 -> { // Transformasi (Normal: 8, Defisiensi Spesifik: 3)
-                if (input == "8") {
-                    skorNormal++
-                } else if (input == "3") {
-                    skorDefisiensi++
-                }
-            }
-            R.drawable.plate5 -> { // Transformasi (Normal: 57, Defisiensi Spesifik: 35)
-                if (input == "57") {
-                    skorNormal++
-                } else if (input == "35") {
-                    skorDefisiensi++
-                }
-            }
-            R.drawable.plate7 -> { // Transformasi (Normal: 3, Defisiensi Spesifik: 5)
-                if (input == "3") {
-                    skorNormal++
-                } else if (input == "5") {
-                    skorDefisiensi++
-                }
-            }
-            R.drawable.plate10 -> { // Menghilang
-                if (input == "2") skorNormal++ else skorDefisiensi++
-            }
-            R.drawable.plate16 -> { // Menghilang
-                if (input == "16") skorNormal++ else skorDefisiensi++
-            }
-            R.drawable.plate18 -> { // Tersembunyi
-                if (input == "-") skorNormal++ else skorDefisiensi++
-            }
+            R.drawable.plate1 -> if (input == "12") skorNormal++ else skorDefisiensi++
+            R.drawable.plate2 -> if (input == "8") skorNormal++ else if (input == "3") skorDefisiensi++
+            R.drawable.plate5 -> if (input == "57") skorNormal++ else if (input == "35") skorDefisiensi++
+            R.drawable.plate7 -> if (input == "3") skorNormal++ else if (input == "5") skorDefisiensi++
+            R.drawable.plate10 -> if (input == "2") skorNormal++ else skorDefisiensi++
+            R.drawable.plate16 -> if (input == "16") skorNormal++ else skorDefisiensi++
+            R.drawable.plate18 -> if (input == "-") skorNormal++ else skorDefisiensi++
         }
-        Log.d(
-            "ISHIHARA_DEBUG",
-            "SCREENING | PlateID: $plateId | Jawaban: $input | SkorNormal: $skorNormal | SkorDefisiensi: $skorDefisiensi"
-        )
+        Log.d("ISHIHARA_DEBUG", "SCREENING | PlateID: $plateId | Jawaban: $input | SkorNormal: $skorNormal | SkorDefisiensi: $skorDefisiensi")
     }
 
     private fun updateClassificationScore(plateId: Int, input: String, correct: String) {
-        // Jika pengguna menjawab dengan benar (penglihatan normal), tambah skorNormal dan keluar.
         if (input == correct) {
             skorNormal++
             return
         }
 
         var isDeficiencyDetected = false
-
-        // Logika klasifikasi baru berdasarkan input spesifik dari pengguna
         when (plateId) {
-            R.drawable.plate22 -> { // Normal: 26
-                if (input == "6") {
-                    totalSkorProtan++
-                    isDeficiencyDetected = true
-                } else if (input == "2") {
-                    totalSkorDeutan++
-                    isDeficiencyDetected = true
-                }
+            R.drawable.plate22 -> {
+                if (input == "6") { totalSkorProtan++; isDeficiencyDetected = true }
+                else if (input == "2") { totalSkorDeutan++; isDeficiencyDetected = true }
             }
-            R.drawable.plate23 -> { // Normal: 42
-                if (input == "2") {
-                    totalSkorProtan++
-                    isDeficiencyDetected = true
-                } else if (input == "4") {
-                    totalSkorDeutan++
-                    isDeficiencyDetected = true
-                }
+            R.drawable.plate23 -> {
+                if (input == "2") { totalSkorProtan++; isDeficiencyDetected = true }
+                else if (input == "4") { totalSkorDeutan++; isDeficiencyDetected = true }
             }
-            R.drawable.plate24 -> { // Normal: 35
-                if (input == "5") {
-                    totalSkorProtan++
-                    isDeficiencyDetected = true
-                } else if (input == "3") {
-                    totalSkorDeutan++
-                    isDeficiencyDetected = true
-                }
+            R.drawable.plate24 -> {
+                if (input == "5") { totalSkorProtan++; isDeficiencyDetected = true }
+                else if (input == "3") { totalSkorDeutan++; isDeficiencyDetected = true }
             }
-            R.drawable.plate25 -> { // Normal: 96
-                if (input == "6") {
-                    totalSkorProtan++
-                    isDeficiencyDetected = true
-                } else if (input == "9") {
-                    totalSkorDeutan++
-                    isDeficiencyDetected = true
-                }
+            R.drawable.plate25 -> {
+                if (input == "6") { totalSkorProtan++; isDeficiencyDetected = true }
+                else if (input == "9") { totalSkorDeutan++; isDeficiencyDetected = true }
             }
         }
 
-        // Hanya tambah skor defisiensi jika salah satu jawaban spesifik terdeteksi.
-        if (isDeficiencyDetected) {
-            skorDefisiensi++
-        }
+        if (isDeficiencyDetected) skorDefisiensi++
 
-        Log.d(
-            "ISHIHARA_DEBUG",
-            "CLASSIFICATION | PlateID: $plateId | Jawaban: $input | JawabanBenar: $correct | " +
+        Log.d("ISHIHARA_DEBUG",
+            "CLASSIFICATION | PlateID: $plateId | Jawaban: $input | Benar: $correct | " +
                     "SkorNormal: $skorNormal | SkorDefisiensi: $skorDefisiensi | Protan: $totalSkorProtan | Deutan: $totalSkorDeutan"
         )
     }
-    private fun processResult() {
-        val resultType = getColorBlindnessType(
-            skorNormal, skorDefisiensi, totalSkorDeutan, totalSkorProtan
-        )
 
+    /* ------------ Hasil ------------ */
+
+    private fun processResult() {
+        val resultType = getColorBlindnessType(skorNormal, skorDefisiensi, totalSkorDeutan, totalSkorProtan)
         val correctCount = answers.count { it.answer == it.question.correctAnswer }
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -256,7 +205,7 @@ class IshiharaActivity : AppCompatActivity() {
             if (latest != null) {
                 val updated = latest.copy(
                     isIshiharaDone = true,
-                    score = correctCount, // total semua jawaban benar
+                    score = correctCount,
                     hasilTes = resultType,
                     scoreNormal = skorNormal,
                     scoreDeuteranopia = totalSkorDeutan,

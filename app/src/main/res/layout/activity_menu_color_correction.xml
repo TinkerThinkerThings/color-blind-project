@@ -10,10 +10,10 @@
     tools:context=".UI.menu.MenuColorCorrectionActivity">
 
   <TextView
-      android:id="@+id/textView"
+      android:id="@+id/tvTitle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:paddingTop="40dp"
+     android:layout_marginTop="60dp"
       android:text="KOREKSI WARNA"
       android:textColor="@color/white"
       android:textSize="25sp"
@@ -23,7 +23,7 @@
       app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
-      android:id="@+id/textView2"
+      android:id="@+id/tvSubTitle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:paddingTop="15dp"
@@ -32,19 +32,22 @@
       android:textSize="18sp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/textView" />
+      app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
+  <!-- Menu Kamera -->
   <LinearLayout
+      android:id="@+id/btnCamera"
       android:layout_width="300dp"
-      android:layout_height="120dp"
+      android:layout_height="150dp"
       android:orientation="vertical"
       android:gravity="center"
       android:background="@drawable/bg_menutext"
-      android:layout_marginTop="-300dp"
-      app:layout_constraintTop_toBottomOf="@id/textView2"
+      android:clickable="true"
+      android:focusable="true"
+      app:layout_constraintTop_toBottomOf="@id/tvSubTitle"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent">
+      android:layout_marginTop="100dp">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -58,27 +61,33 @@
         android:text="KAMERA"
         android:textStyle="bold"
         android:textColor="@color/mainColor"
-        android:layout_marginTop="-6dp" />
+        android:layout_marginTop="4dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ambil gambar untuk koreksi warna"
         android:fontFamily="@font/poppins"
         android:textColor="@color/mainColor"
-        android:layout_marginTop="0dp" />
+        android:textSize="12sp"
+        android:layout_marginTop="2dp" />
 
   </LinearLayout>
+
+  <!-- Menu Galeri -->
   <LinearLayout
+      android:id="@+id/btnGallery"
       android:layout_width="300dp"
-      android:layout_height="120dp"
+      android:layout_height="150dp"
       android:orientation="vertical"
       android:gravity="center"
-      android:layout_marginTop="40dp"
       android:background="@drawable/bg_menutext"
-      app:layout_constraintTop_toBottomOf="@id/textView2"
+      android:clickable="true"
+      android:focusable="true"
+      app:layout_constraintTop_toBottomOf="@id/btnCamera"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent">
+      android:layout_marginTop="30dp">
 
     <ImageView
         android:layout_width="50dp"
@@ -92,14 +101,16 @@
         android:text="GALERI"
         android:textStyle="bold"
         android:textColor="@color/mainColor"
-        android:layout_marginTop="0dp" />
+        android:layout_marginTop="4dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pilih gambar dari perangkat Anda"
         android:fontFamily="@font/poppins"
         android:textColor="@color/mainColor"
-        android:layout_marginTop="0dp" />
+        android:textSize="12sp"
+        android:layout_marginTop="2dp" />
 
   </LinearLayout>
 

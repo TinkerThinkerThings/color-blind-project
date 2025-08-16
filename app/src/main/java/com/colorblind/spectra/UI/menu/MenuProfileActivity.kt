@@ -60,9 +60,9 @@ class MenuProfileActivity : AppCompatActivity() {
                     binding.tvNamaLengkap.text = biodata.nama
                     binding.tvUsia.text = biodata.usia.toString()
                     binding.tvJenisKelamin.text = biodata.jenisKelamin
-                    binding.tvScoreNormal.text = "Skor Normal: ${biodata.scoreNormal}"
-                    binding.tvScoreDeuteranopia.text = "Skor Deuteranopia: ${biodata.scoreDeuteranopia}"
-                    binding.tvScoreProtanopia.text = "Skor Protanopia: ${biodata.scoreProtanopia}"
+                    binding.tvScoreNormal.text = "${biodata.scoreNormal}"
+                    binding.tvScoreDeuteranopia.text = "${biodata.scoreDeuteranopia}"
+                    binding.tvScoreProtanopia.text = "${biodata.scoreProtanopia}"
                     binding.tvHasilTesFinal.text = biodata.hasilTes
                 }
             }

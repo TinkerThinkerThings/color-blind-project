@@ -22,10 +22,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Card Putih -->
     <LinearLayout
         android:id="@+id/cardContainer"
-        android:layout_width="0dp"
+        android:layout_width="380dp"
         android:layout_height="600dp"
         android:layout_marginTop="30dp"
         android:orientation="vertical"
@@ -260,7 +259,6 @@
             android:layout_width="200dp"
             android:layout_height="48dp"
             android:layout_marginTop="40dp"
-            android:backgroundTint="#A9C6F9"
             android:background="@drawable/button_rounded"
             android:layout_gravity="center"
             android:gravity="center"

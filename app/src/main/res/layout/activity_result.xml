@@ -35,7 +35,7 @@
                 android:text="Hasil Tes Ishihara"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/poppins"
+                android:fontFamily="@font/aleosbold"
                 android:layout_marginTop="20dp"
                 android:textColor="@color/blue_dark"
                 android:layout_marginBottom="16dp"/>
@@ -78,13 +78,14 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Normal"
+                            android:textStyle="bold"
                             android:textColor="@color/white"
                             android:textSize="18sp"/>
                         <TextView
                             android:id="@+id/valueNormal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="7"
+                            android:text="0"
                             android:textColor="@color/white"
                             android:textSize="18sp"
                             android:textStyle="bold"/>
@@ -101,6 +102,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Deuteranopia"
+                            android:textStyle="bold"
                             android:textColor="@color/white"
                             android:textSize="18sp"/>
                         <TextView
@@ -124,6 +126,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Protanopia"
+                            android:textStyle="bold"
                             android:textColor="@color/white"
                             android:textSize="18sp"/>
                         <TextView
@@ -190,6 +193,7 @@
                 android:text="Menu Utama"
                 android:textAllCaps="false"
                 android:textStyle="bold"
+                android:fontFamily="@font/aleosbold"
                 app:backgroundTint="@color/mainColor"
                 app:cornerRadius="27dp" />
         </LinearLayout>

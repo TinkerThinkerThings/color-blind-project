@@ -57,9 +57,9 @@ class ResultActivity : AppCompatActivity() {
                 // Tampilkan hasil ke UI
                 if (latestBiodata != null) {
                     binding.textClassification.text = latestBiodata.hasilTes
-                    binding.valueNormal.text = "Normal: ${latestBiodata.scoreNormal}"
-                    binding.valueDeuteranopia.text = "Deuteranopia: ${latestBiodata.scoreDeuteranopia}"
-                    binding.valueProtanopia.text = "Protanopia: ${latestBiodata.scoreProtanopia}"
+                    binding.valueNormal.text = "${latestBiodata.scoreNormal}"
+                    binding.valueDeuteranopia.text = "${latestBiodata.scoreDeuteranopia}"
+                    binding.valueProtanopia.text = "${latestBiodata.scoreProtanopia}"
                 } else {
                     binding.textClassification.text = "Data tidak ditemukan"
                     binding.valueNormal.text = "Normal: -"

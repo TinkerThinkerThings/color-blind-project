@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:background="@android:color/background_light">
+
+    <!-- Judul -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hasil Koreksi Warna"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="12dp"
+        android:textColor="@android:color/black" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="@android:color/darker_gray">
+
+        <ImageView
+            android:id="@+id/imgResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:maxHeight="400dp"
+            android:background="@android:color/transparent"/>
+    </androidx.cardview.widget.CardView>
+
+
+    <!-- Tombol aksi -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kembali"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_rounded"
+            android:backgroundTint="@null"
+            app:cornerRadius="24dp"
+            app:rippleColor="@android:color/darker_gray"/>
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_rounded"
+            android:backgroundTint="@null"
+            app:cornerRadius="24dp"
+            app:rippleColor="@android:color/darker_gray"/>
+    </LinearLayout>
+
+    <!-- Info hasil -->
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipe koreksi: -"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black" />
+
+</LinearLayout>
