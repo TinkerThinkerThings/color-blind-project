@@ -18,6 +18,10 @@ import com.colorblind.spectra.databinding.ActivityResultColorCorrectionBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.opencv.android.OpenCVLoader
+import org.opencv.android.Utils
+import org.opencv.core.Mat
+import org.opencv.imgproc.Imgproc
 import java.io.OutputStream
 
 class ResultColorCorrectionActivity : AppCompatActivity() {
@@ -32,6 +36,13 @@ class ResultColorCorrectionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Load OpenCV
+        if (!OpenCVLoader.initDebug()) {
+            Toast.makeText(this, "Gagal memuat OpenCV", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         binding = ActivityResultColorCorrectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -45,19 +56,45 @@ class ResultColorCorrectionActivity : AppCompatActivity() {
                 return@launch
             }
 
-            correctedBitmap = when (latest?.hasilTes) {
-                "Protanopia" -> ColorBlindCorrection.applyCorrection(
-                    bitmap,
-                    ColorBlindCorrection.Type.PROTAN
-                )
-                "Deuteranopia" -> ColorBlindCorrection.applyCorrection(
-                    bitmap,
-                    ColorBlindCorrection.Type.DEUTAN
-                )
-                "Normal" -> bitmap
-                else -> bitmap
+            // Pastikan bitmap ARGB_8888 & mutable
+            val safeBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+
+            // Konversi Bitmap ke Mat
+            val matTmp = Mat()
+            Utils.bitmapToMat(safeBitmap, matTmp)
+
+            // Konversi ke RGB 3-channel (sesuai ColorBlindCorrection)
+            val srcMat = Mat()
+            if (matTmp.channels() == 4) {
+                Imgproc.cvtColor(matTmp, srcMat, Imgproc.COLOR_RGBA2RGB)
+            } else if (matTmp.channels() == 3) {
+                Imgproc.cvtColor(matTmp, srcMat, Imgproc.COLOR_BGR2RGB)
+            } else {
+                matTmp.release()
+                srcMat.release()
+                Toast.makeText(this@ResultColorCorrectionActivity, "Format gambar tidak didukung", Toast.LENGTH_SHORT).show()
+                return@launch
             }
 
+            // Terapkan KOREKSI (daltonize) sesuai hasil tes
+            val correctedMat = when (latest?.hasilTes) {
+                "Protanopia" -> ColorBlindCorrection.daltonize(srcMat, "protan")
+                "Deuteranopia" -> ColorBlindCorrection.daltonize(srcMat, "deutan")
+                "Normal" -> srcMat
+                else -> srcMat
+            }
+
+            // Konversi kembali Mat (RGB) ke Bitmap (ARGB_8888)
+            val resultBitmap = Bitmap.createBitmap(
+                correctedMat.cols(),
+                correctedMat.rows(),
+                Bitmap.Config.ARGB_8888
+            )
+            Utils.matToBitmap(correctedMat, resultBitmap)
+
+            correctedBitmap = resultBitmap
+
+            // Tampilkan hasil
             binding.imgResult.setImageBitmap(correctedBitmap)
             binding.tvInfo.text = "Tipe koreksi: ${latest?.hasilTes ?: "Tidak diketahui"}"
         }
@@ -71,7 +108,6 @@ class ResultColorCorrectionActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
             correctedBitmap?.let { bmp ->
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                    // Android 9 ke bawah butuh WRITE_EXTERNAL_STORAGE
                     if (ContextCompat.checkSelfPermission(
                             this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -86,7 +122,6 @@ class ResultColorCorrectionActivity : AppCompatActivity() {
                         saveImageToGallery(bmp)
                     }
                 } else {
-                    // Android 10 ke atas, langsung simpan
                     saveImageToGallery(bmp)
                 }
             } ?: Toast.makeText(this, "Gambar belum tersedia", Toast.LENGTH_SHORT).show()
@@ -116,7 +151,6 @@ class ResultColorCorrectionActivity : AppCompatActivity() {
         }
     }
 
-    // Callback hasil request permission
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
