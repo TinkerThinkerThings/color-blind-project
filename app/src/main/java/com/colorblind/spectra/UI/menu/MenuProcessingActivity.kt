@@ -51,10 +51,10 @@ class MenuProcessingActivity : AppCompatActivity() {
     private lateinit var btnToggle: MaterialSwitch
     private lateinit var progress: ProgressBar
 
-    // Variabel logic
-    private var userType: RealtimeColorCorrection.Type = RealtimeColorCorrection.Type.DEUTAN
+    // Logic
+    private var userType: RealtimeColorCorrection.Type = RealtimeColorCorrection.Type.NORMAL
     private var severity = 1.0
-    private var boost = 1.0
+    private var boost = 0.5
     private var running = false
 
     // CameraX
@@ -83,10 +83,9 @@ class MenuProcessingActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_menu_processing)
 
-        // Handle insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            val sys = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(sys.left, sys.top, sys.right, sys.bottom)
             insets
         }
 
@@ -105,31 +104,41 @@ class MenuProcessingActivity : AppCompatActivity() {
         btnToggle = findViewById(R.id.btnToggle)
         progress = findViewById(R.id.progress)
 
-        // Sinkronkan state awal toggle ke variabel running
         running = btnToggle.isChecked
 
-        // Ambil hasil tes dari DB
+        // Load hasil tes dari DB
         lifecycleScope.launch(Dispatchers.IO) {
             val db = AppDatabase.getInstance(applicationContext)
             val latest: EntityBiodata? = db.biodataDao().getLatest()
-
             val mapped = when (latest?.hasilTes?.lowercase()) {
                 "protanopia", "protan" -> RealtimeColorCorrection.Type.PROTAN
                 "deuteranopia", "deutan" -> RealtimeColorCorrection.Type.DEUTAN
                 else -> RealtimeColorCorrection.Type.NORMAL
             }
-
             withContext(Dispatchers.Main) {
                 userType = mapped
                 when (userType) {
-                    RealtimeColorCorrection.Type.NORMAL -> rbNormal.isChecked = true
-                    RealtimeColorCorrection.Type.PROTAN -> rbProtan.isChecked = true
-                    RealtimeColorCorrection.Type.DEUTAN -> rbDeutan.isChecked = true
+                    RealtimeColorCorrection.Type.NORMAL -> {
+                        rbNormal.isChecked = true
+                        rbProtan.visibility = View.VISIBLE
+                        rbDeutan.visibility = View.VISIBLE
+                    }
+                    RealtimeColorCorrection.Type.PROTAN -> {
+                        rbProtan.isChecked = true
+                        rbDeutan.visibility = View.GONE   // sembunyikan deutan
+                        rbProtan.visibility = View.VISIBLE
+                    }
+                    RealtimeColorCorrection.Type.DEUTAN -> {
+                        rbDeutan.isChecked = true
+                        rbProtan.visibility = View.GONE   // sembunyikan protan
+                        rbDeutan.visibility = View.VISIBLE
+                    }
                 }
+                Log.d("MenuProcessing", "🧬 userType from DB = $userType")
             }
         }
 
-        // Setup sliders
+        // Sliders
         seekSeverity.valueFrom = 0f
         seekSeverity.valueTo = 1f
         seekSeverity.value = 1f
@@ -137,31 +146,29 @@ class MenuProcessingActivity : AppCompatActivity() {
 
         seekBoost.valueFrom = 0f
         seekBoost.valueTo = 1f
-        seekBoost.value = 1f
-        tvBoost.text = "Boost: 1.00"
+        seekBoost.value = 0.5f
+        tvBoost.text = "Boost: 0.50"
 
         seekSeverity.addOnChangeListener { _, value, _ ->
             severity = value.toDouble()
             tvSeverity.text = "Severity: ${"%.2f".format(severity)}"
+            Log.d("MenuProcessing", "🔧 Severity = $severity")
         }
-
         seekBoost.addOnChangeListener { _, value, _ ->
             boost = value.toDouble()
             tvBoost.text = "Boost: ${"%.2f".format(boost)}"
+            Log.d("MenuProcessing", "🔧 Boost = $boost")
         }
 
-        // Radio button override
-        rbNormal.setOnCheckedChangeListener { _, checked -> if (checked) userType = RealtimeColorCorrection.Type.NORMAL }
-        rbProtan.setOnCheckedChangeListener { _, checked -> if (checked) userType = RealtimeColorCorrection.Type.PROTAN }
-        rbDeutan.setOnCheckedChangeListener { _, checked -> if (checked) userType = RealtimeColorCorrection.Type.DEUTAN }
+        rbNormal.setOnCheckedChangeListener { _, checked -> if (checked) { userType = RealtimeColorCorrection.Type.NORMAL; Log.d("MenuProcessing", "📌 NORMAL") } }
+        rbProtan.setOnCheckedChangeListener { _, checked -> if (checked) { userType = RealtimeColorCorrection.Type.PROTAN; Log.d("MenuProcessing", "📌 PROTAN") } }
+        rbDeutan.setOnCheckedChangeListener { _, checked -> if (checked) { userType = RealtimeColorCorrection.Type.DEUTAN; Log.d("MenuProcessing", "📌 DEUTAN") } }
 
-        // Toggle button
         btnToggle.setOnCheckedChangeListener { _, checked ->
             running = checked
-            Log.i("MenuProcessing", "▶ Running mode = $running")
+            Log.i("MenuProcessing", "▶ Running = $running")
         }
 
-        // Minta permission camera
         askCam.launch(Manifest.permission.CAMERA)
     }
 
@@ -181,7 +188,7 @@ class MenuProcessingActivity : AppCompatActivity() {
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
 
-            val yuvToRgb = YuvToRgbConverter(this)
+            val converter = YuvToRgbConverter()
 
             analyzer.setAnalyzer(cameraExecutor) { imageProxy ->
                 try {
@@ -191,12 +198,11 @@ class MenuProcessingActivity : AppCompatActivity() {
                         Bitmap.Config.ARGB_8888
                     )
 
-                    // Konversi YUV -> RGB
-                    yuvToRgb.yuvToRgb(imageProxy, bmp)
+                    // YUV -> RGB
+                    converter.yuvToRgb(imageProxy, bmp)
 
                     val start = System.nanoTime()
 
-                    // 🔹 Pilih output: normal camera atau hasil processing
                     val out = if (!running || userType == RealtimeColorCorrection.Type.NORMAL) {
                         bmp
                     } else {
@@ -211,21 +217,17 @@ class MenuProcessingActivity : AppCompatActivity() {
 
                     val end = System.nanoTime()
                     val fps = 1e9 / (end - start)
+                    Log.d("Analyzer", "⏱ ${(end - start) / 1e6} ms (~${"%.1f".format(fps)} FPS)")
 
-                    // 🔹 Rotasi sesuai orientasi kamera
+                    // Rotasi output sesuai orientasi sensor
                     val rotation = imageProxy.imageInfo.rotationDegrees
                     val rotated = if (rotation != 0) {
-                        val matrix = Matrix()
-                        matrix.postRotate(rotation.toFloat())
-                        Bitmap.createBitmap(out, 0, 0, out.width, out.height, matrix, true)
-                    } else {
-                        out
-                    }
+                        val m = Matrix().apply { postRotate(rotation.toFloat()) }
+                        Bitmap.createBitmap(out, 0, 0, out.width, out.height, m, true)
+                    } else out
 
                     runOnUiThread {
                         imageResult.setImageBitmap(rotated)
-
-                        // FPS hanya tampil kalau processing aktif
                         if (running && userType != RealtimeColorCorrection.Type.NORMAL) {
                             tvFps.text = "FPS ~ ${"%.1f".format(fps)}"
                             tvFps.visibility = View.VISIBLE
@@ -237,7 +239,7 @@ class MenuProcessingActivity : AppCompatActivity() {
                     }
 
                 } catch (e: Exception) {
-                    Log.e("Analyzer", "❌ Error processing frame: ${e.message}")
+                    Log.e("Analyzer", "❌ Error processing frame: ${e.message}", e)
                 } finally {
                     imageProxy.close()
                 }

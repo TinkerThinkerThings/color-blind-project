@@ -1,145 +1,59 @@
 package com.colorblind.spectra.core
 
 import android.graphics.Bitmap
+import android.util.Log
 import org.opencv.android.Utils
 import org.opencv.core.Core
 import org.opencv.core.CvType
 import org.opencv.core.Mat
 import org.opencv.core.Scalar
-import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
 
-/**
- * Realtime Color Correction untuk simulasi & koreksi buta warna.
- */
 object RealtimeColorCorrection {
 
     enum class Type { NORMAL, PROTAN, DEUTAN }
 
-    /** Matriks konversi RGB (linear) -> LMS */
-    private fun rgb2lmsMat(): Mat = Mat(3, 3, CvType.CV_64F).apply {
-        put(
-            0, 0,
+    // --- Matrices (float32) ---
+    // RGB -> LMS
+    private val RGB2LMS = Mat(3, 3, CvType.CV_32F).apply {
+        put(0, 0,
             17.8824, 43.5161, 4.11935,
             3.45565, 27.1554, 3.86714,
             0.0299566, 0.184309, 1.46709
         )
     }
 
-    /** Matriks konversi LMS -> RGB (linear) */
-    private fun lms2rgbMat(): Mat = Mat(3, 3, CvType.CV_64F).apply {
-        put(
-            0, 0,
-            0.0809444479, -0.130504409, 0.116721066,
-            -0.0102485335, 0.0540193266, -0.113614708,
-            -0.0003652969, -0.0041216147, 0.693511405
+    // LMS -> RGB
+    private val LMS2RGB = Mat(3, 3, CvType.CV_32F).apply {
+        put(0, 0,
+            0.0809444479, -0.1305044090, 0.1167210660,
+            -0.0102485335, 0.0540193266, -0.1136147080,
+            -0.0003652969, -0.0041216147, 0.6935114050
         )
     }
 
-    /** Simulasi Protanopia (buta merah) */
-    private fun simProtan(): Mat = Mat(3, 3, CvType.CV_64F).apply {
-        put(
-            0, 0,
-            0.0, 1.05118294, -0.05116099,
-            0.0, 1.0, 0.0,
-            0.0, 0.0, 1.0
+    // Simulasi protan & deutan (sederhana, stabil)
+    private val PROTAN_SIM = Mat(3, 3, CvType.CV_32F).apply {
+        put(0, 0,
+            0.0, 2.02344, -2.52581,
+            0.0, 1.0,      0.0,
+            0.0, 0.0,      1.0
         )
     }
 
-    /** Simulasi Deuteranopia (buta hijau) */
-    private fun simDeutan(): Mat = Mat(3, 3, CvType.CV_64F).apply {
-        put(
-            0, 0,
+    private val DEUTAN_SIM = Mat(3, 3, CvType.CV_32F).apply {
+        put(0, 0,
             1.0, 0.0, 0.0,
-            0.9513092, 0.0, 0.04866992,
+            0.494207, 0.0, 1.24827,
             0.0, 0.0, 1.0
         )
     }
 
-    /** Helper Scalar dengan nilai sama untuk semua channel */
-    private fun scalarAll(v: Double) = Scalar(v, v, v)
-
     /**
-     * FUNGSI BARU: Menerapkan konversi sRGB -> Linear RGB ke Matriks
-     * Rumus:
-     * - if (s <= 0.04045) -> s / 12.92
-     * - else -> ((s + 0.055) / 1.055) ^ 2.4
-     * @param src Matriks input CV_64F dengan nilai 0.0..1.0
-     * @return Matriks hasil konversi CV_64F
-     */
-    private fun applySrgbToLinear(src: Mat): Mat {
-        // Matriks untuk menampung hasil akhir
-        val dst = Mat(src.rows(), src.cols(), src.type())
-
-        // Buat 'mask' untuk elemen yang <= 0.04045
-        val mask = Mat()
-        Core.compare(src, scalarAll(0.04045), mask, Core.CMP_LE) // LE = Less than or Equal
-
-        // Buat mask yang dibalik (inverted)
-        val invertedMask = Mat()
-        Core.subtract(Mat(mask.size(), mask.type(), Scalar(255.0)), mask, invertedMask)
-
-        // Hitung bagian 'else' -> pow(((s + 0.055) / 1.055), 2.4)
-        val termElse = Mat()
-        Core.add(src, scalarAll(0.055), termElse)
-        Core.divide(termElse, scalarAll(1.055), termElse)
-        Core.pow(termElse, 2.4, termElse)
-        // Salin hasil 'else' ke dst menggunakan invertedMask
-        termElse.copyTo(dst, invertedMask)
-
-        // Hitung bagian 'if' -> s / 12.92
-        val termIf = Mat()
-        Core.divide(src, scalarAll(12.92), termIf)
-        // Salin hasil 'if' ke dst hanya jika mask-nya 255 (memenuhi kondisi LE)
-        termIf.copyTo(dst, mask)
-
-        return dst
-    }
-
-
-    /**
-     * FUNGSI BARU: Menerapkan konversi Linear RGB -> sRGB ke Matriks
-     * Rumus:
-     * - if (x <= 0.0031308) -> 12.92 * x
-     * - else -> 1.055 * (x ^ (1/2.4)) - 0.055
-     * @param src Matriks input CV_64F dengan nilai 0.0..1.0
-     * @return Matriks hasil konversi CV_64F
-     */
-    private fun applyLinearToSrgb(src: Mat): Mat {
-        // Matriks untuk menampung hasil akhir
-        val dst = Mat(src.rows(), src.cols(), src.type())
-
-        // Buat 'mask' untuk elemen yang <= 0.0031308
-        val mask = Mat()
-        Core.compare(src, scalarAll(0.0031308), mask, Core.CMP_LE)
-
-        // Buat mask yang dibalik (inverted)
-        val invertedMask = Mat()
-        Core.subtract(Mat(mask.size(), mask.type(), Scalar(255.0)), mask, invertedMask)
-
-        // Hitung bagian 'else' -> 1.055 * pow(x, 1.0 / 2.4) - 0.055
-        val termElse = Mat()
-        Core.pow(src, 1.0 / 2.4, termElse)
-        Core.multiply(termElse, scalarAll(1.055), termElse)
-        Core.subtract(termElse, scalarAll(0.055), termElse)
-        // Salin hasil 'else' ke dst menggunakan invertedMask
-        termElse.copyTo(dst, invertedMask)
-
-        // Hitung bagian 'if' -> 12.92 * x
-        val termIf = Mat()
-        Core.multiply(src, scalarAll(12.92), termIf)
-        // Salin hasil 'if' ke dst hanya jika mask-nya 255
-        termIf.copyTo(dst, mask)
-
-        return dst
-    }
-
-    /**
-     * Proses 1 frame Bitmap → hasil koreksi
-     * @param type Jenis simulasi (NORMAL, PROTAN, DEUTAN)
-     * @param severity Intensitas simulasi (0..1)
-     * @param boost Tingkat penguatan koreksi (0..1)
-     * @param useLabFinishing Apakah pakai finishing LAB + CLAHE
+     * Proses satu frame.
+     * - srcBitmap: ARGB_8888 dari kamera
+     * - severity: 0..1 (seberapa kuat koreksi)
+     * - boost: 0..1 (intensitas finishing Lab)
      */
     fun processFrame(
         srcBitmap: Bitmap,
@@ -148,107 +62,132 @@ object RealtimeColorCorrection {
         boost: Double,
         useLabFinishing: Boolean
     ): Bitmap {
-        // Convert Bitmap → Mat (RGB)
+        if (type == Type.NORMAL || severity <= 0.0) {
+            return srcBitmap
+        }
+
+        val w = srcBitmap.width
+        val h = srcBitmap.height
+
+        // Bitmap (RGBA) -> Mat
+        val rgba = Mat()
+        Utils.bitmapToMat(srcBitmap, rgba) // 8UC4
+
+        // RGBA -> RGB (8UC3)
+        val rgb8u = Mat()
+        Imgproc.cvtColor(rgba, rgb8u, Imgproc.COLOR_RGBA2RGB)
+        rgba.release()
+
+        // Ke float 0..1
         val rgb = Mat()
-        Utils.bitmapToMat(srcBitmap, rgb)
-        Imgproc.cvtColor(rgb, rgb, Imgproc.COLOR_RGBA2RGB)
+        rgb8u.convertTo(rgb, CvType.CV_32FC3, 1.0 / 255.0)
+        rgb8u.release()
 
-        // Konversi ke float64
-        val rgbF = Mat()
-        rgb.convertTo(rgbF, CvType.CV_64F)
+        // ----- RGB -> LMS -----
+        val lms = Mat(rgb.rows(), rgb.cols(), CvType.CV_32FC3)
+        Core.transform(rgb, lms, RGB2LMS)
 
-        // --- PERUBAHAN DIMULAI DI SINI ---
+        // ----- Simulasikan buta warna -----
+        val simMat = if (type == Type.PROTAN) PROTAN_SIM else DEUTAN_SIM
+        val lmsSim = Mat(lms.rows(), lms.cols(), lms.type())
+        Core.transform(lms, lmsSim, simMat)
 
-        // Normalisasi ke 0..1
-        val normalized = Mat()
-        Core.divide(rgbF, scalarAll(255.0), normalized)
+        // Error di domain LMS
+        val lmsErr = Mat(lms.rows(), lms.cols(), lms.type())
+        Core.subtract(lms, lmsSim, lmsErr)
 
-        // sRGB → Linear RGB
-        val lin = applySrgbToLinear(normalized)
+        // ----- Kompensasi error -----
+        // Split ke 3 channel (sekarang aman: 3-channel image, bukan Nx3 1-channel!)
+        val lmsCh = ArrayList<Mat>(3)
+        Core.split(lms, lmsCh)
 
-        // --- AKHIR DARI PERUBAHAN BAGIAN 1 ---
+        val errCh = ArrayList<Mat>(3)
+        Core.split(lmsErr, errCh)
 
-        // Reshape jadi Nx3
-        val rows = lin.rows()
-        val cols = lin.cols()
-        val lin3 = lin.reshape(1, rows * cols)
+        val sev = severity.toFloat()
 
-        // Linear RGB → LMS
-        val Mrgb2lms = rgb2lmsMat()
-        val lms = Mat()
-        Core.gemm(lin3, Mrgb2lms.t(), 1.0, Mat(), 0.0, lms)
-
-        // Simulasi defisiensi
-        val simMat = when (type) {
-            Type.PROTAN -> simProtan()
-            Type.DEUTAN -> simDeutan()
-            else -> Mat.eye(3, 3, CvType.CV_64F)
+        when (type) {
+            Type.PROTAN -> {
+                // L channel error -> distribusikan ke M dan S
+                val add = Mat()
+                Core.multiply(errCh[0], Scalar.all(sev.toDouble()), add)
+                Core.add(lmsCh[1], add, lmsCh[1]) // M += sev * eL
+                Core.add(lmsCh[2], add, lmsCh[2]) // S += sev * eL
+                add.release()
+            }
+            Type.DEUTAN -> {
+                // M channel error -> distribusikan ke L dan S
+                val add = Mat()
+                Core.multiply(errCh[1], Scalar.all(sev.toDouble()), add)
+                Core.add(lmsCh[0], add, lmsCh[0]) // L += sev * eM
+                Core.add(lmsCh[2], add, lmsCh[2]) // S += sev * eM
+                add.release()
+            }
+            else -> { /* NORMAL sudah di-return awal */ }
         }
-        val lmsSimFull = Mat()
-        Core.gemm(lms, simMat.t(), 1.0, Mat(), 0.0, lmsSimFull)
 
-        // Campur hasil simulasi sesuai severity
-        val lmsSim = Mat()
-        Core.addWeighted(lms, 1.0 - severity, lmsSimFull, severity, 0.0, lmsSim)
+        // Merge kembali hasil koreksi
+        val lmsCorr = Mat(lms.rows(), lms.cols(), lms.type())
+        Core.merge(lmsCh, lmsCorr)
 
-        // LMS → Linear RGB
-        val Mlms2rgb = lms2rgbMat()
-        val rgbSim = Mat()
-        Core.gemm(lmsSim, Mlms2rgb.t(), 1.0, Mat(), 0.0, rgbSim)
+        // ----- LMS -> RGB -----
+        val rgbCorr = Mat(rgb.rows(), rgb.cols(), rgb.type())
+        Core.transform(lmsCorr, rgbCorr, LMS2RGB)
 
-        // Hitung error (selisih)
-        val err = Mat()
-        Core.subtract(lin3, rgbSim, err)
+        // Clamp ke [0,1] untuk aman
+        Core.max(rgbCorr, Scalar(0.0, 0.0, 0.0), rgbCorr)
+        Core.min(rgbCorr, Scalar(1.0, 1.0, 1.0), rgbCorr)
 
-        // Tambahkan error sesuai boost → hasil koreksi
-        val corr = Mat()
-        Core.addWeighted(lin3, 1.0, err, boost, 0.0, corr)
+        // ----- (Opsional) Finishing di Lab -----
+        val post = if (useLabFinishing && boost > 0.0) {
+            val lab = Mat()
+            Imgproc.cvtColor(rgbCorr, lab, Imgproc.COLOR_RGB2Lab)
 
-        // Reshape kembali ke citra
-        val corrImg = corr.reshape(3, rows)
+            val labCh = ArrayList<Mat>(3)
+            Core.split(lab, labCh)
 
-        // --- PERUBAHAN DIMULAI DI SINI ---
+            // Skala lembut: L sedikit, a/b sedikit lebih kuat
+            val b = boost.toFloat() // 0..1
+            val lScale = 1.0 + 0.15 * b
+            val aScale = 1.0 + 0.25 * b
+            val bScale = 1.0 + 0.25 * b
 
-        // Pastikan nilai berada di rentang 0.0 - 1.0 sebelum konversi balik
-        Core.min(corrImg, scalarAll(1.0), corrImg)
-        Core.max(corrImg, scalarAll(0.0), corrImg)
+            Core.multiply(labCh[0], Scalar.all(lScale), labCh[0]) // L di range ~0..100
+            Core.multiply(labCh[1], Scalar.all(aScale), labCh[1])
+            Core.multiply(labCh[2], Scalar.all(bScale), labCh[2])
 
-        // Linear RGB → sRGB
-        val srgbNonNormalized = applyLinearToSrgb(corrImg)
-
-        // Skala kembali ke 0..255
-        val srgb = Mat()
-        Core.multiply(srgbNonNormalized, scalarAll(255.0), srgb)
-
-        // --- AKHIR DARI PERUBAHAN BAGIAN 2 ---
-
-        // Convert ke 8-bit
-        val srgb8 = Mat()
-        srgb.convertTo(srgb8, CvType.CV_8UC3)
-
-        var out = Mat()
-        if (useLabFinishing) {
-            // Finishing pakai LAB + CLAHE
-            Imgproc.cvtColor(srgb8, out, Imgproc.COLOR_RGB2Lab)
-            val lab = ArrayList<Mat>(3)
-            Core.split(out, lab)
-
-            val clahe = Imgproc.createCLAHE(2.0, Size(8.0, 8.0))
-            clahe.apply(lab[0], lab[0])
-
-            Core.merge(lab, out)
-            Imgproc.cvtColor(out, out, Imgproc.COLOR_Lab2RGB)
+            Core.merge(labCh, lab)
+            val rgbFin = Mat()
+            Imgproc.cvtColor(lab, rgbFin, Imgproc.COLOR_Lab2RGB)
+            lab.release()
+            labCh.forEach { it.release() }
+            rgbFin
         } else {
-            out = srgb8
+            rgbCorr
         }
 
-        // Convert ke RGBA untuk Bitmap
-        Imgproc.cvtColor(out, out, Imgproc.COLOR_RGB2RGBA)
+        // Clamp lagi (konversi balik bisa overshoot)
+        Core.max(post, Scalar(0.0, 0.0, 0.0), post)
+        Core.min(post, Scalar(1.0, 1.0, 1.0), post)
 
-        // Buat Bitmap hasil
-        val bmpOut = Bitmap.createBitmap(cols, rows, Bitmap.Config.ARGB_8888)
-        Utils.matToBitmap(out, bmpOut)
+        // Float 0..1 -> 8UC3
+        val out8u3 = Mat()
+        post.convertTo(out8u3, CvType.CV_8UC3, 255.0)
 
-        return bmpOut
+        // RGB -> RGBA untuk Bitmap ARGB_8888
+        val out8u4 = Mat()
+        Imgproc.cvtColor(out8u3, out8u4, Imgproc.COLOR_RGB2RGBA)
+
+        val outBmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        Utils.matToBitmap(out8u4, outBmp)
+
+        // Cleanup
+        rgb.release(); lms.release(); lmsSim.release(); lmsErr.release()
+        lmsCh.forEach { it.release() }; errCh.forEach { it.release() }
+        lmsCorr.release(); rgbCorr.release(); if (post !== rgbCorr) rgbCorr.release()
+        out8u3.release(); out8u4.release()
+
+        Log.d("RealtimeCC", "✅ frame corrected type=$type sev=$severity boost=$boost lab=$useLabFinishing")
+        return outBmp
     }
 }

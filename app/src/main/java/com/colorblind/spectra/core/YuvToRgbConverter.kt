@@ -1,73 +1,71 @@
 package com.colorblind.spectra.core
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.media.Image
-import androidx.camera.core.ImageProxy
-import android.renderscript.Allocation
-import android.renderscript.Element
-import android.renderscript.RenderScript
-import android.renderscript.ScriptIntrinsicYuvToRGB
-import android.renderscript.Type
-import androidx.annotation.OptIn
+import android.graphics.BitmapFactory
+import android.graphics.ImageFormat
+import android.graphics.Rect
+import android.graphics.YuvImage
 import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.ImageProxy
+import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
 
-class YuvToRgbConverter(context: Context) {
+class YuvToRgbConverter {
 
-    private val rsYuv: RenderScript = RenderScript.create(context)
-    private val scriptYuvToRgb: ScriptIntrinsicYuvToRGB =
-        ScriptIntrinsicYuvToRGB.create(rsYuv, Element.U8_4(rsYuv))
+    @OptIn(ExperimentalGetImage::class)
+    fun yuvToRgb(imageProxy: ImageProxy, output: Bitmap) {
+        val image = imageProxy.image ?: return
+        require(image.format == ImageFormat.YUV_420_888) { "Format bukan YUV_420_888" }
 
-    private var yuvByteArray: ByteArray? = null
-    private var yuvType: Type? = null
-    private var allocationIn: Allocation? = null
-    private var allocationOut: Allocation? = null
+        val nv21 = yuv420888ToNv21(imageProxy)
 
-    /**
-     * Konversi dari format YUV ke RGB Bitmap
-     */
-    fun yuvToRgb(image: Image, output: Bitmap) {
-        val yBuffer = image.planes[0].buffer
-        val uBuffer = image.planes[1].buffer
-        val vBuffer = image.planes[2].buffer
+        // NV21 -> JPEG -> Bitmap
+        val yuv = YuvImage(nv21, ImageFormat.NV21, imageProxy.width, imageProxy.height, null)
+        val out = ByteArrayOutputStream()
+        yuv.compressToJpeg(Rect(0, 0, imageProxy.width, imageProxy.height), 100, out)
+        val jpeg = out.toByteArray()
+
+        val bmp = BitmapFactory.decodeByteArray(jpeg, 0, jpeg.size)
+        val scaled = if (bmp.width == output.width && bmp.height == output.height) bmp
+        else Bitmap.createScaledBitmap(bmp, output.width, output.height, true)
+
+        // Salin ke output
+        val canvas = android.graphics.Canvas(output)
+        canvas.drawBitmap(scaled, 0f, 0f, null)
+
+        if (scaled !== bmp) scaled.recycle()
+        bmp.recycle()
+    }
+
+    private fun yuv420888ToNv21(image: ImageProxy): ByteArray {
+        val yBuffer: ByteBuffer = image.planes[0].buffer
+        val uBuffer: ByteBuffer = image.planes[1].buffer
+        val vBuffer: ByteBuffer = image.planes[2].buffer
 
         val ySize = yBuffer.remaining()
         val uSize = uBuffer.remaining()
         val vSize = vBuffer.remaining()
 
-        // Alokasikan ulang jika ukuran buffer berubah
-        if (yuvByteArray == null || yuvByteArray!!.size != ySize + uSize + vSize) {
-            yuvByteArray = ByteArray(ySize + uSize + vSize)
+        val nv21 = ByteArray(ySize + uSize + vSize)
+
+        // Y
+        yBuffer.get(nv21, 0, ySize)
+
+        // NV21 = Y + VU interleaved
+        val rowStride = image.planes[2].rowStride
+        val pixelStride = image.planes[2].pixelStride
+        var pos = ySize
+        val w2 = image.width / 2
+        val h2 = image.height / 2
+
+        for (row in 0 until h2) {
+            var vRowPos = row * rowStride
+            var uRowPos = row * image.planes[1].rowStride
+            for (col in 0 until w2) {
+                nv21[pos++] = vBuffer.get(vRowPos + col * pixelStride)
+                nv21[pos++] = uBuffer.get(uRowPos + col * image.planes[1].pixelStride)
+            }
         }
-
-        // Susun data YUV (Y + V + U)
-        yBuffer.get(yuvByteArray!!, 0, ySize)
-        vBuffer.get(yuvByteArray!!, ySize, vSize)
-        uBuffer.get(yuvByteArray!!, ySize + vSize, uSize)
-
-        // Inisialisasi RenderScript jika belum ada
-        if (yuvType == null) {
-            val elemYuv = Element.U8(rsYuv)
-            yuvType = Type.Builder(rsYuv, elemYuv)
-                .setX(yuvByteArray!!.size)
-                .create()
-
-            allocationIn = Allocation.createTyped(rsYuv, yuvType)
-            allocationOut = Allocation.createFromBitmap(rsYuv, output)
-        }
-
-        // Proses konversi
-        allocationIn!!.copyFrom(yuvByteArray)
-        scriptYuvToRgb.setInput(allocationIn)
-        scriptYuvToRgb.forEach(allocationOut)
-        allocationOut!!.copyTo(output)
-    }
-
-    /**
-     * Overload untuk ImageProxy (CameraX)
-     */
-    @OptIn(ExperimentalGetImage::class)
-    fun yuvToRgb(imageProxy: ImageProxy, output: Bitmap) {
-        yuvToRgb(imageProxy.image!!, output)
+        return nv21
     }
 }
