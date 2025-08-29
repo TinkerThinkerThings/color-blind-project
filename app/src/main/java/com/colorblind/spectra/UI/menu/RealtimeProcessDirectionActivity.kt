@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -28,11 +29,14 @@ class RealtimeProcessDirectionActivity : AppCompatActivity() {
         val buttonStart = findViewById<Button>(R.id.buttonStart)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
 
-        buttonStart.setOnClickListener {
-            // Tampilkan progress bar
-            progressBar.visibility = View.VISIBLE
+        // 🔙 Panggil tombol Back
+        val buttonBack = findViewById<ImageButton>(R.id.buttonBack)
+        buttonBack.setOnClickListener {
+            finish()
+        }
 
-            // Nonaktifkan tombol agar tidak diklik berkali-kali
+        buttonStart.setOnClickListener {
+            progressBar.visibility = View.VISIBLE
             buttonStart.isEnabled = false
 
             // Jalankan delay 2 detik

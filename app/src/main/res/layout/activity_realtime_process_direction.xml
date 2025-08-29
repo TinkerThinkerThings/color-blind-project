@@ -5,8 +5,22 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9D7"
+    android:background="#FAF7F0"
     tools:context=".UI.menu.RealtimeProcessDirectionActivity">
+
+    <ImageButton
+        android:id="@+id/buttonBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Kembali"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/mainColor" />
+
     <TextView
         android:id="@+id/textTitle"
         android:layout_width="match_parent"
@@ -25,23 +39,24 @@
         android:id="@+id/textSubtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
-        android:gravity="center"
         android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:fontFamily="@font/poppins"
         android:text="Lihat dunia dengan tampilan warna yang telah disesuaikan, secara langsung"
         android:textColor="@color/mainColor"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@+id/textTitle"
         tools:layout_editor_absoluteX="27dp" />
+
     <LinearLayout
         android:id="@+id/containerContent"
         android:layout_width="0dp"
         android:layout_height="500dp"
+        android:layout_marginTop="90dp"
         android:background="@drawable/rounded_instruction_bg"
         android:clipToOutline="true"
         android:elevation="4dp"
         android:orientation="vertical"
-        android:layout_marginTop="90dp"
         android:padding="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textTitle">
@@ -64,9 +79,10 @@
             android:layout_marginBottom="16dp"
             android:orientation="vertical">
 
+            <!-- Langkah 1 -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="75dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/editttext_background"
                 android:orientation="horizontal"
@@ -87,8 +103,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_weight="1"
                     android:layout_marginTop="-7dp"
+                    android:layout_weight="1"
                     android:fontFamily="@font/poppins"
                     android:justificationMode="inter_word"
                     android:text="Mulai stream untuk memulai pemrosesan"
@@ -96,9 +112,10 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
+            <!-- Langkah 2 -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="75dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/editttext_background"
                 android:orientation="horizontal"
@@ -119,8 +136,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_weight="1"
                     android:layout_marginTop="-7dp"
+                    android:layout_weight="1"
                     android:fontFamily="@font/poppins"
                     android:justificationMode="inter_word"
                     android:text="Arahkan kamera pada objek yang ingin dilihat"
@@ -128,9 +145,10 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
+            <!-- Langkah 3 -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="75dp"
                 android:background="@drawable/editttext_background"
                 android:orientation="horizontal"
                 android:padding="12dp">
@@ -150,8 +168,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_weight="1"
                     android:layout_marginTop="-7dp"
+                    android:layout_weight="1"
                     android:fontFamily="@font/poppins"
                     android:justificationMode="inter_word"
                     android:text="Warna yang tertangkap akan langsung dikoreksi oleh sistem."
