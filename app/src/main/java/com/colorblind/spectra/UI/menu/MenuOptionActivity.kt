@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.colorblind.spectra.R
-import com.colorblind.spectra.UI.form.FormActivity
 import com.colorblind.spectra.data.lokal.room.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,6 +19,7 @@ class MenuOptionActivity : AppCompatActivity() {
     private lateinit var menuProfile: LinearLayout
     private lateinit var menuKoreksi: LinearLayout
     private lateinit var menuRealtime: LinearLayout
+    private lateinit var menuPrivacy: LinearLayout // ✅ Tambahan
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +30,7 @@ class MenuOptionActivity : AppCompatActivity() {
         menuProfile = findViewById(R.id.menuProfile)
         menuKoreksi = findViewById(R.id.menuKoreksi)
         menuRealtime = findViewById(R.id.menuRealtime)
+        menuPrivacy = findViewById(R.id.menuPrivacy) // ✅ Inisialisasi
 
         val biodataDao = AppDatabase.getInstance(this).biodataDao()
 
@@ -46,7 +47,7 @@ class MenuOptionActivity : AppCompatActivity() {
 
         menuProfile.setOnClickListener {
             val intent = Intent(this, MenuProfileActivity::class.java)
-            intent.putExtra("fromMenuOption", true) // Tambah flag untuk loading
+            intent.putExtra("fromMenuOption", true)
             startActivity(intent)
         }
 
@@ -57,6 +58,9 @@ class MenuOptionActivity : AppCompatActivity() {
         menuRealtime.setOnClickListener {
             startActivity(Intent(this, RealtimeProcessDirectionActivity::class.java))
         }
+
+        menuPrivacy.setOnClickListener {
+            startActivity(Intent(this, PrivacyActivity::class.java)) // ✅ Panggil PrivacyActivity
+        }
     }
 }
-

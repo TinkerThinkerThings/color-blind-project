@@ -8,6 +8,19 @@
     android:background="@color/mainColor"
     tools:context=".UI.menu.MenuProfileActivity">
 
+    <ImageButton
+        android:id="@+id/buttonBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Kembali"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@android:color/white" />
+
     <!-- Judul -->
     <TextView
         android:id="@+id/tvProfile"
@@ -131,8 +144,9 @@
             android:layout_marginTop="20dp"
             android:text="HASIL TES"
             android:textStyle="bold"
+            android:fontFamily="@font/poppins"
             android:gravity="center"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textColor="#6F8DC4" />
 
         <!-- Skor Tes -->
@@ -235,7 +249,7 @@
             android:layout_marginTop="12dp"
             android:textSize="18sp"
             android:fontFamily="@font/poppins"
-            android:text="Halis Klasifikasi"
+            android:text="Hasil Klasifikasi"
             android:textColor="#6F8DC4"
             android:textStyle="bold" />
 

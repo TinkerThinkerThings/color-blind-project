@@ -26,7 +26,7 @@
         android:layout_margin="8dp"
         app:cardCornerRadius="24dp"
         app:cardElevation="6dp"
-        app:cardBackgroundColor="@color/colorhead">
+        app:cardBackgroundColor="#FAF7F0">
 
         <ImageView
             android:id="@+id/imgResult"

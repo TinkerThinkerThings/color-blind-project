@@ -10,4 +10,8 @@
         <!-- Atur tingkat kegelapan (0.0 = tidak gelap, 1.0 = gelap total) -->
         <item name="android:backgroundDimAmount">0.8</item>
     </style>
+    <style name="RoundedImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item> <!-- otomatis jadi lingkaran -->
+    </style>
 </resources>

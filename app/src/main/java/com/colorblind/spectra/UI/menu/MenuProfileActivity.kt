@@ -35,6 +35,11 @@ class MenuProfileActivity : AppCompatActivity() {
             insets
         }
 
+        // 🔙 Tombol Back
+        binding.buttonBack.setOnClickListener {
+            finish()
+        }
+
         // Cek apakah datang dari MenuOptionActivity
         val fromMenuOption = intent.getBooleanExtra("fromMenuOption", false)
         if (fromMenuOption) {
@@ -110,7 +115,6 @@ class MenuProfileActivity : AppCompatActivity() {
 
         loadingDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         loadingDialog.window?.setDimAmount(0.8f) // tingkat gelap 0.0 - 1.0
-
 
         loadingDialog.show()
 

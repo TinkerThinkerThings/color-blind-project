@@ -4,9 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9D7"
+    android:background="#FAF7F0"
     android:id="@+id/main"
     tools:context=".UI.menu.ColorCorrectionDirectionActivity">
+
+
+    <ImageButton
+        android:id="@+id/buttonBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Kembali"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/mainColor" />
 
     <TextView
         android:id="@+id/textTitle"
@@ -53,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/poppins"
+            android:textStyle="normal"
             android:justificationMode="inter_word"
             android:text="Fitur ini akan membantu Anda melihat gambar dengan lebih nyaman. Algoritma koreksi warna akan otomatis memproses gambar sesuai persepsi buta warna parsial Anda."
             android:textColor="#FFFFFF"
@@ -90,6 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="7dp"
                     android:layout_weight="1"
+                    android:textStyle="normal"
                     android:layout_marginTop="-7dp"
                     android:fontFamily="@font/poppins"
                     android:justificationMode="inter_word"
@@ -123,6 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="7dp"
                     android:layout_weight="1"
+                    android:textStyle="normal"
                     android:fontFamily="@font/poppins"
                     android:layout_marginTop="-7dp"
                     android:justificationMode="inter_word"
@@ -157,6 +174,7 @@
                     android:layout_weight="1"
                     android:layout_marginTop="-7dp"
                     android:fontFamily="@font/poppins"
+                    android:textStyle="normal"
                     android:justificationMode="inter_word"
                     android:text="Hasil akhir akan ditampilkan dengan koreksi warna sesuai kebutuhan visual Anda."
                     android:textColor="#475B9E"
@@ -171,13 +189,13 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
             android:gravity="center"
+            android:textStyle="normal"
             android:text="⚠️ Fitur ini tidak menggantikan diagnosis profesional.\nUntuk pemeriksaan lebih lanjut, silakan konsultasi ke tenaga ahli spesialis."
             android:textColor="#FFFFFF"
             android:textSize="12sp" />
 
     </LinearLayout>
 
-    <!-- Tombol -->
     <Button
         android:id="@+id/buttonStart"
         android:layout_width="200dp"

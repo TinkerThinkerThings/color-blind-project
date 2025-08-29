@@ -1,9 +1,12 @@
 package com.colorblind.spectra.UI.quiz
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -53,50 +56,65 @@ class IshiharaActivity : AppCompatActivity() {
         questions = getScreeningQuestions().toMutableList()
         showQuestion(currentIndex)
 
+        // Klik tombol Next
         buttonNext.setOnClickListener {
-            val input = editAnswer.text.toString().trim()
-            if (input.isEmpty()) {
-                editAnswer.error = "Jawaban tidak boleh kosong"
-                return@setOnClickListener
-            }
+            handleAnswer()
+        }
 
-            val q = questions[currentIndex]
-            answers.add(Answer(q, input))
+        // Tekan tombol Done/Next dari keyboard
+        editAnswer.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+                handleAnswer()
+                true
+            } else false
+        }
+    }
 
+    /* ------------ Handler Jawaban ------------ */
+
+    private fun handleAnswer() {
+        val input = editAnswer.text.toString().trim()
+        if (input.isEmpty()) {
+            editAnswer.error = "Jawaban tidak boleh kosong"
+            return
+        }
+
+        // Tutup keyboard setelah user input
+        closeKeyboard()
+
+        val q = questions[currentIndex]
+        answers.add(Answer(q, input))
+
+        if (phase == Phase.SCREENING) {
+            updateScreeningScore(q.imageResId, input)
+        } else {
+            updateClassificationScore(q.imageResId, input, q.correctAnswer)
+        }
+
+        currentIndex++
+
+        if (currentIndex < questions.size) {
+            showLoadingThenNextQuestion()
+        } else {
             if (phase == Phase.SCREENING) {
-                updateScreeningScore(q.imageResId, input)
+                if (skorNormal > skorDefisiensi) {
+                    processResult()
+                } else {
+                    phase = Phase.CLASSIFICATION
+                    questions.addAll(getClassificationQuestions()) // 22–24 saja
+                    showLoadingThenNextQuestion()
+                }
             } else {
-                updateClassificationScore(q.imageResId, input, q.correctAnswer)
-            }
-
-            currentIndex++
-
-            if (currentIndex < questions.size) {
-                showLoadingThenNextQuestion()
-            } else {
-                if (phase == Phase.SCREENING) {
-                    if (skorNormal > skorDefisiensi) {
-                        processResult()
-                    } else {
-                        phase = Phase.CLASSIFICATION
-                        questions.addAll(getClassificationQuestions()) // 22–24 saja
+                val sudahAda25 = questions.any { it.imageResId == R.drawable.plate25 }
+                if (!sudahAda25 && questions.any { it.imageResId == R.drawable.plate24 }) {
+                    if (totalSkorProtan == totalSkorDeutan) {
+                        questions.add(Question(R.drawable.plate25, "96"))
                         showLoadingThenNextQuestion()
+                    } else {
+                        processResult()
                     }
                 } else {
-                    // Cek apakah baru selesai 22–24 dan belum ada 25
-                    val sudahAda25 = questions.any { it.imageResId == R.drawable.plate25 }
-                    if (!sudahAda25 && questions.any { it.imageResId == R.drawable.plate24 }) {
-                        if (totalSkorProtan == totalSkorDeutan) {
-                            // Tie → tambahkan plate 25
-                            questions.add(Question(R.drawable.plate25, "96"))
-                            showLoadingThenNextQuestion()
-                        } else {
-                            processResult()
-                        }
-                    } else {
-                        // Sudah termasuk plate 25 → hasil akhir
-                        processResult()
-                    }
+                    processResult()
                 }
             }
         }
@@ -118,7 +136,6 @@ class IshiharaActivity : AppCompatActivity() {
         Question(R.drawable.plate22, "26"),
         Question(R.drawable.plate23, "42"),
         Question(R.drawable.plate24, "35")
-        // Plate 25 tidak langsung dimasukkan, hanya jika tie
     )
 
     /* ------------ UI helpers ------------ */
@@ -141,6 +158,13 @@ class IshiharaActivity : AppCompatActivity() {
             buttonNext.isEnabled = true
             if (resetIndex) currentIndex = 0
             showQuestion(currentIndex)
+        }
+    }
+
+    private fun closeKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        currentFocus?.let { view ->
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 

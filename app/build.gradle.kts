@@ -48,7 +48,6 @@ android {
         viewBinding = true
     }
 
-    // 🔹 Penting: kasih tahu Gradle folder jniLibs
     sourceSets {
         getByName("main") {
             jniLibs.srcDirs("src/main/jniLibs")
@@ -81,8 +80,6 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
 
-    // 🔹 Link ke module OpenCV SDK (pastikan sudah ada di settings.gradle)
-
     // CameraX
     implementation("androidx.camera:camera-core:$camerax_version")
     implementation("androidx.camera:camera-camera2:$camerax_version")
@@ -90,6 +87,6 @@ dependencies {
     implementation("androidx.camera:camera-view:$camerax_version")
     implementation("androidx.camera:camera-extensions:$camerax_version")
 
-
+    // lib opencv
     implementation("org.opencv:opencv:4.12.0")
 }
