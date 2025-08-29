@@ -1,11 +1,54 @@
 <resources>
     <string name="app_name">Spectra</string>
     <string name="hello">Hello!</string>
-    <string name="selamat_datang_spectera">Selamat Datang Spectera</string>
+    <string name="selamat_datang_spectera">Selamat Datang Di Spectra</string>
     <string name="pilih_menu">Pilih Menu</string>
     <string name="koreksi_warna">Koreksi Warna</string>
     <string name="splahsscreen">SPECTRA</string>
     <string name="button_get_started">Get Started</string>
     <string name="profile_pengguna">Profile Pengguna</string>
     <string name="real_time_nprocessing">Real-Time Processing</string>
+    <string name="privacy_text"><![CDATA[
+<b>Terakhir Diperbarui :</b><br/>
+SPECTRA menghargai privasi dan keamanan data Anda. Dokumen ini menjelaskan bagaimana aplikasi SPECTRA menangani informasi pengguna.<br/><br/>
+
+<b>Informasi yang Dikumpulkan</b><br/>
+Untuk mempersonalisasi pengalaman pengguna, aplikasi ini mengumpulkan data yang diberikan oleh pengguna secara sukarela saat pertama kali menggunakan aplikasi.
+Data tersebut meliputi nama, usia dan jenis kelamin. Informasi ini disimpan secara lokal di perangkat pengguna.
+Aplikasi <b>tidak mengumpulkan data sensitif lainnya, tidak mengunggah data ini ke server mana pun, dan tidak membagikannya kepada pihak ketiga.</b><br/><br/>
+
+<b>Data yang Disimpan Secara Lokal</b><br/>
+Untuk memungkinkan fitur koreksi warna yang dipersonalisasi, aplikasi akan <b>menyimpan hasil dari tes buta warna</b> yang Anda lakukan.
+Data ini hanya berupa jenis buta warna yang terdeteksi, seperti <i>Deuteranopia</i> dan <i>Protanopia</i>.
+Data profil ini hanya <b>disimpan secara lokal di perangkat Anda</b> dan tidak pernah dikirim, diunggah, atau dibagikan ke server mana pun.<br/><br/>
+
+<b>Izin yang Digunakan</b><br/>
+• <b>Izin Akses Kamera :</b> Aplikasi memerlukan izin untuk mengakses kamera perangkat Anda. Izin ini digunakan pada dua fitur berikut :<br/>
+&nbsp;&nbsp;1. Mengambil foto yang akan dikoreksi warnanya<br/>
+&nbsp;&nbsp;2. Mengaktifkan pemrosesan warna secara <i>real-time</i> melalui kamera.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Aliran data dari kamera hanya diproses di perangkat Anda dan tidak disimpan, direkam, atau dibagikan.<br/><br/>
+
+• <b>Izin Akses Galeri :</b> Aplikasi memerlukan izin untuk mengakses galeri perangkat Anda.
+Izin ini hanya digunakan saat Anda memilih dan mengunggah gambar untuk proses koreksi warna.
+Gambar diproses secara lokal di perangkat Anda dan tidak disimpan atau dibagikan.<br/><br/>
+
+<b>Keamanan Data</b><br/>
+Karena aplikasi ini tidak mengumpulkan atau mengirim data pribadi ke luar perangkat, tidak ada data pribadi yang berisiko bocor atau diakses oleh pihak ketiga.
+Anda memiliki kendali penuh atas data profil buta warna Anda yang tersimpan di perangkat.<br/><br/>
+
+<b>Bukan Perangkat Medis</b><br/>
+Aplikasi ini adalah alat bantu digital dan bukan merupakan perangkat medis resmi.
+Hasil tes yang diberikan tidak dapat dijadikan dasar untuk diagnosis medis.
+Untuk diagnosis yang akurat dan konsultasi lebih lanjut mengenai kondisi penglihatan Anda, harap hubungi profesional kesehatan mata.<br/><br/>
+
+<b>Perubahan Kebijakan</b><br/>
+Kebijakan Privasi ini dapat diperbarui dari waktu ke waktu.
+Versi terbaru akan selalu dipublikasikan di tautan ini.
+Penggunaan aplikasi yang terus-menerus setelah perubahan kebijakan dianggap sebagai penerimaan Anda terhadap pembaruan tersebut.<br/><br/>
+
+<b>Kontak</b><br/>
+Jika Anda memiliki pertanyaan mengenai Kebijakan Privasi ini, silakan hubungi kami melalui email : <u>willyerussa@gmail.com</u>
+]]></string>
+    <string name="kebijakan_privasi_spectra"><b>KEBIJAKAN PRIVASI\nSPECTRA</b></string>
+
 </resources>
