@@ -50,11 +50,6 @@ class MenuOptionActivity : AppCompatActivity() {
             intent.putExtra("fromMenuOption", true)
             startActivity(intent)
         }
-
-        menuKoreksi.setOnClickListener {
-            startActivity(Intent(this, ColorCorrectionDirectionActivity::class.java))
-        }
-
         menuRealtime.setOnClickListener {
             startActivity(Intent(this, RealtimeProcessDirectionActivity::class.java))
         }
