@@ -60,7 +60,7 @@ class MenuOptionActivity : AppCompatActivity() {
         }
 
         menuPrivacy.setOnClickListener {
-            startActivity(Intent(this, PrivacyActivity::class.java)) // ✅ Panggil PrivacyActivity
+            startActivity(Intent(this, PrivacyActivity::class.java))
         }
     }
 }

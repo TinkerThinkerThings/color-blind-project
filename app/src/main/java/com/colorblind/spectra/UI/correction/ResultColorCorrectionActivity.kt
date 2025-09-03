@@ -27,7 +27,7 @@ import java.io.OutputStream
 class ResultColorCorrectionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityResultColorCorrectionBinding
-    private var correctedBitmap: Bitmap? = null   // simpan hasil koreksi
+    private var correctedBitmap: Bitmap? = null   // hasil koreksi
 
     companion object {
         var originalBitmap: Bitmap? = null   // gambar asli sebelum koreksi
@@ -84,7 +84,7 @@ class ResultColorCorrectionActivity : AppCompatActivity() {
                 else -> srcMat
             }
 
-            // Konversi kembali Mat (RGB) ke Bitmap (ARGB_8888)
+            // Konversi kembali Mat ke Bitmap
             val resultBitmap = Bitmap.createBitmap(
                 correctedMat.cols(),
                 correctedMat.rows(),
@@ -94,15 +94,29 @@ class ResultColorCorrectionActivity : AppCompatActivity() {
 
             correctedBitmap = resultBitmap
 
-            // Tampilkan hasil
+            // Tampilkan default = hasil koreksi
             binding.imgResult.setImageBitmap(correctedBitmap)
             binding.tvInfo.text = "Tipe koreksi: ${latest?.hasilTes ?: "Tidak diketahui"}"
         }
 
-        // Tombol kembali
-        binding.btnBack.setOnClickListener {
-            finish()
+        // 🔹 Tombol Before → tampilkan gambar asli
+        binding.btnBefore.setOnClickListener {
+            originalBitmap?.let {
+                binding.imgResult.setImageBitmap(it)
+                binding.tvMode.text = "Tampilan: Sebelum Koreksi"
+            }
         }
+
+        // 🔹 Tombol After → tampilkan hasil koreksi
+        binding.btnAfter.setOnClickListener {
+            correctedBitmap?.let {
+                binding.imgResult.setImageBitmap(it)
+                binding.tvMode.text = "Tampilan: Sesudah Koreksi"
+            }
+        }
+
+        // Tombol kembali
+        binding.btnBack.setOnClickListener { finish() }
 
         // Tombol simpan
         binding.btnSave.setOnClickListener {
