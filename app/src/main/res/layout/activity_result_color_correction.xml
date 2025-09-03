@@ -32,7 +32,8 @@
             android:id="@+id/imgResult"
             android:layout_width="match_parent"
             android:layout_height="450dp"
-            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             android:background="@android:color/transparent"/>
     </androidx.cardview.widget.CardView>
 
@@ -83,4 +84,23 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@android:color/black" />
+    <TextView
+        android:id="@+id/tvRgbInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="RGB Info"
+        android:fontFamily="@font/poppins"
+        android:textSize="14sp"
+        android:padding="8dp"
+        android:textColor="@android:color/black" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </LinearLayout>

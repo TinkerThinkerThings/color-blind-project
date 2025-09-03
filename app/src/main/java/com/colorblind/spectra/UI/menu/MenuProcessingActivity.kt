@@ -27,6 +27,7 @@ import com.colorblind.spectra.core.RealtimeColorCorrection
 import com.colorblind.spectra.core.YuvToRgbConverter
 import com.colorblind.spectra.data.lokal.entity.EntityBiodata
 import com.colorblind.spectra.data.lokal.room.AppDatabase
+import com.colorblind.spectra.utils.ColorUtils
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.slider.Slider
 import kotlinx.coroutines.Dispatchers
@@ -125,12 +126,12 @@ class MenuProcessingActivity : AppCompatActivity() {
                     }
                     RealtimeColorCorrection.Type.PROTAN -> {
                         rbProtan.isChecked = true
-                        rbDeutan.visibility = View.GONE   // sembunyikan deutan
+                        rbDeutan.visibility = View.GONE
                         rbProtan.visibility = View.VISIBLE
                     }
                     RealtimeColorCorrection.Type.DEUTAN -> {
                         rbDeutan.isChecked = true
-                        rbProtan.visibility = View.GONE   // sembunyikan protan
+                        rbProtan.visibility = View.GONE
                         rbDeutan.visibility = View.VISIBLE
                     }
                 }
@@ -212,6 +213,41 @@ class MenuProcessingActivity : AppCompatActivity() {
                             severity = severity,
                             boost = boost,
                             useLabFinishing = swLab.isChecked
+                        )
+                    }
+
+                    // =============================
+                    // 🔎 UJI ΔE2000
+                    // =============================
+                    // =============================
+// 🔎 UJI ΔE2000 + tampilkan RGB
+// =============================
+                    if (running && userType != RealtimeColorCorrection.Type.NORMAL) {
+                        val cx = bmp.width / 2
+                        val cy = bmp.height / 2
+
+                        val colorOriginal = bmp.getPixel(cx, cy)
+                        val colorCorrected = out.getPixel(cx, cy)
+
+                        val r1 = (colorOriginal shr 16) and 0xFF
+                        val g1 = (colorOriginal shr 8) and 0xFF
+                        val b1 = (colorOriginal) and 0xFF
+
+                        val r2 = (colorCorrected shr 16) and 0xFF
+                        val g2 = (colorCorrected shr 8) and 0xFF
+                        val b2 = (colorCorrected) and 0xFF
+
+                        val lab1 = ColorUtils.rgbToLab(r1, g1, b1)
+                        val lab2 = ColorUtils.rgbToLab(r2, g2, b2)
+                        val deltaE = ColorUtils.deltaE2000(lab1, lab2)
+
+                        // format hasil supaya rapi
+                        val deltaEFormatted = String.format("%.2f", deltaE)
+
+                        Log.d(
+                            "DeltaE",
+                            "🎨 ΔE2000 pixel tengah = $deltaEFormatted | " +
+                                    "RGB asli=($r1,$g1,$b1) → RGB koreksi=($r2,$g2,$b2)"
                         )
                     }
 
