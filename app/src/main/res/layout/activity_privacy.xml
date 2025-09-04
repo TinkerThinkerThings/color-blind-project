@@ -8,39 +8,37 @@
     android:layout_height="match_parent"
     android:background="@color/mainColor"
     tools:context=".UI.menu.PrivacyActivity">
-
-    <!-- Background Header -->
+    
     <View
         android:id="@+id/headerbgup"
         android:layout_width="0dp"
-        android:layout_height="750dp"
+        android:layout_height="0dp"
         android:background="@drawable/header_backgroundup"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/cardPrivacy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.35"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Tombol Back -->
     <ImageButton
         android:id="@+id/btnBack"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="-25dp"
-        android:layout_marginLeft="10dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_arrow_back"
         android:contentDescription="back"
         app:tint="@color/white"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/headerLayout" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- Header Title -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/headerLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -51,32 +49,30 @@
             android:gravity="center"
             android:text="@string/kebijakan_privasi_spectra"
             android:textColor="@android:color/white"
-            android:textSize="23sp"
+            android:textSize="22sp"
             android:fontFamily="@font/poppins"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- CardView untuk konten -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardPrivacy"
-        android:layout_width="400dp"
-        android:layout_height="600dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:layout_marginTop="-100sp"
-        app:cardCornerRadius="30dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="16dp"
         app:cardElevation="6dp"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerLayout">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- ScrollView untuk teks -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -88,16 +84,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:justificationMode="inter_word"
-                android:lineSpacingExtra="3dp"
+                android:lineSpacingExtra="4dp"
                 android:text="@string/privacy_text"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 android:autoLink="email"
+                android:ellipsize="none"
                 android:fontFamily="@font/poppins"
                 android:linksClickable="true"
                 android:clickable="true"
                 android:focusable="true"/>
         </ScrollView>
     </com.google.android.material.card.MaterialCardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
