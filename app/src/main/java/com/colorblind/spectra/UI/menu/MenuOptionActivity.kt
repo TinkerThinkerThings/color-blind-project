@@ -1,5 +1,6 @@
 package com.colorblind.spectra.UI.menu
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
@@ -7,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.colorblind.spectra.R
+import com.colorblind.spectra.UI.quiz.ResultActivity
 import com.colorblind.spectra.data.lokal.room.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,6 +25,20 @@ class MenuOptionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val isInResult = prefs.getBoolean("IS_IN_RESULT", false)
+
+        // ✅ Kalau user belum menekan tombol "Menu Utama" di ResultActivity,
+        // langsung redirect ke ResultActivity lagi
+        if (isInResult) {
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_menu_option)
 
         tvWelcome = findViewById(R.id.tvWelcome)
