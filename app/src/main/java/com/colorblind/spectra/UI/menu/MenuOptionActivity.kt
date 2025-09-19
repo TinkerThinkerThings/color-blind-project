@@ -50,6 +50,10 @@ class MenuOptionActivity : AppCompatActivity() {
             intent.putExtra("fromMenuOption", true)
             startActivity(intent)
         }
+        menuRealtime.setOnClickListener {
+            startActivity(Intent(this, RealtimeProcessDirectionActivity::class.java))
+        }
+
         menuPrivacy.setOnClickListener {
             startActivity(Intent(this, PrivacyActivity::class.java))
         }
