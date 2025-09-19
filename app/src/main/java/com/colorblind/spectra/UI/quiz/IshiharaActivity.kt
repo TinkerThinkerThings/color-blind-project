@@ -52,8 +52,11 @@ class IshiharaActivity : AppCompatActivity() {
         buttonNext      = findViewById(R.id.buttonNext)
         progressBar     = findViewById(R.id.progressBar)
 
-        // Mulai dengan plate screening
-        questions = getScreeningQuestions().toMutableList()
+        // Load progress kalau ada, kalau tidak mulai baru
+        if (!loadProgress()) {
+            questions = getScreeningQuestions().toMutableList()
+            currentIndex = 0
+        }
         showQuestion(currentIndex)
 
         // Klik tombol Next
@@ -73,10 +76,10 @@ class IshiharaActivity : AppCompatActivity() {
     /* ------------ Handler Jawaban ------------ */
 
     private fun handleAnswer() {
-        val input = editAnswer.text.toString().trim()
+        var input = editAnswer.text.toString().trim()
         if (input.isEmpty()) {
-            editAnswer.error = "Jawaban tidak boleh kosong"
-            return
+            // kalau kosong, otomatis diganti "-"
+            input = "-"
         }
 
         // Tutup keyboard setelah user input
@@ -92,6 +95,7 @@ class IshiharaActivity : AppCompatActivity() {
         }
 
         currentIndex++
+        saveProgress() // simpan progress setelah menjawab
 
         if (currentIndex < questions.size) {
             showLoadingThenNextQuestion()
@@ -101,7 +105,8 @@ class IshiharaActivity : AppCompatActivity() {
                     processResult()
                 } else {
                     phase = Phase.CLASSIFICATION
-                    questions.addAll(getClassificationQuestions()) // 22–24 saja
+                    questions.addAll(getClassificationQuestions())
+                    saveProgress()
                     showLoadingThenNextQuestion()
                 }
             } else {
@@ -109,6 +114,7 @@ class IshiharaActivity : AppCompatActivity() {
                 if (!sudahAda25 && questions.any { it.imageResId == R.drawable.plate24 }) {
                     if (totalSkorProtan == totalSkorDeutan) {
                         questions.add(Question(R.drawable.plate25, "96"))
+                        saveProgress()
                         showLoadingThenNextQuestion()
                     } else {
                         processResult()
@@ -211,7 +217,8 @@ class IshiharaActivity : AppCompatActivity() {
 
         if (isDeficiencyDetected) skorDefisiensi++
 
-        Log.d("ISHIHARA_DEBUG",
+        Log.d(
+            "ISHIHARA_DEBUG",
             "CLASSIFICATION | PlateID: $plateId | Jawaban: $input | Benar: $correct | " +
                     "SkorNormal: $skorNormal | SkorDefisiensi: $skorDefisiensi | Protan: $totalSkorProtan | Deutan: $totalSkorDeutan"
         )
@@ -220,9 +227,13 @@ class IshiharaActivity : AppCompatActivity() {
     /* ------------ Hasil ------------ */
 
     private fun processResult() {
+        clearProgress() // hapus progress setelah selesai
+
         val resultType = getColorBlindnessType(skorNormal, skorDefisiensi, totalSkorDeutan, totalSkorProtan)
         val correctCount = answers.count { it.answer == it.question.correctAnswer }
 
+        val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        prefs.edit().putBoolean("IS_IN_ISHIHARA", false).apply()
         lifecycleScope.launch(Dispatchers.IO) {
             val db = AppDatabase.getInstance(applicationContext)
             val latest = db.biodataDao().getLatest()
@@ -261,5 +272,45 @@ class IshiharaActivity : AppCompatActivity() {
         } else {
             if (totalSkorDeutan > totalSkorProtan) "Deuteranopia" else "Protanopia"
         }
+    }
+
+    /* ------------ Progress Save/Load ------------ */
+
+    private fun saveProgress() {
+        val prefs = getSharedPreferences("ISHIHARA_PREFS", Context.MODE_PRIVATE)
+        prefs.edit().apply {
+            putInt("phase", if (phase == Phase.SCREENING) 0 else 1)
+            putInt("currentIndex", currentIndex)
+            putInt("skorNormal", skorNormal)
+            putInt("skorDefisiensi", skorDefisiensi)
+            putInt("totalSkorDeutan", totalSkorDeutan)
+            putInt("totalSkorProtan", totalSkorProtan)
+            apply()
+        }
+    }
+
+    private fun loadProgress(): Boolean {
+        val prefs = getSharedPreferences("ISHIHARA_PREFS", Context.MODE_PRIVATE)
+        if (!prefs.contains("currentIndex")) return false
+
+        phase = if (prefs.getInt("phase", 0) == 0) Phase.SCREENING else Phase.CLASSIFICATION
+        currentIndex = prefs.getInt("currentIndex", 0)
+        skorNormal = prefs.getInt("skorNormal", 0)
+        skorDefisiensi = prefs.getInt("skorDefisiensi", 0)
+        totalSkorDeutan = prefs.getInt("totalSkorDeutan", 0)
+        totalSkorProtan = prefs.getInt("totalSkorProtan", 0)
+
+        questions = if (phase == Phase.SCREENING) {
+            getScreeningQuestions().toMutableList()
+        } else {
+            getScreeningQuestions().toMutableList() + getClassificationQuestions()
+        }.toMutableList()
+
+        return true
+    }
+
+    private fun clearProgress() {
+        val prefs = getSharedPreferences("ISHIHARA_PREFS", Context.MODE_PRIVATE)
+        prefs.edit().clear().apply()
     }
 }
