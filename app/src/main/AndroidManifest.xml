@@ -41,7 +41,7 @@
             android:exported="false" />
         <activity
             android:name=".UI.form.FormActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".UI.SplashActivity"
             android:exported="true"
