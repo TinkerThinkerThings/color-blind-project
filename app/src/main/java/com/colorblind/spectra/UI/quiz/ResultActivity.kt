@@ -1,10 +1,11 @@
 package com.colorblind.spectra.UI.quiz
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import com.colorblind.spectra.R // Pastikan import R benar
+import com.colorblind.spectra.R
 import com.colorblind.spectra.UI.menu.MenuOptionActivity
 import com.colorblind.spectra.data.lokal.room.AppDatabase
 import com.colorblind.spectra.databinding.ActivityResultBinding
@@ -18,6 +19,7 @@ import kotlinx.coroutines.withContext
 class ResultActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityResultBinding
+    private val prefs by lazy { getSharedPreferences("app_prefs", Context.MODE_PRIVATE) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,24 +27,21 @@ class ResultActivity : AppCompatActivity() {
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Hapus pemanggilan class LoadingDialog
-        // val loadingDialog = LoadingDialog(this)
+        // Tandai bahwa user sedang ada di ResultActivity
+        prefs.edit().putBoolean("IS_IN_RESULT", true).apply()
 
-        // 1. Buat AlertDialog secara langsung dari file XML
+        // Buat AlertDialog loading dari XML
         val dialogView = layoutInflater.inflate(R.layout.dialog_loading, null)
         val loadingDialog = AlertDialog.Builder(this)
             .setView(dialogView)
             .setCancelable(false)
             .create()
 
-        // Opsi: agar background transparan seperti contoh sebelumnya
         loadingDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        loadingDialog.window?.setDimAmount(0.8f) // tingkat gelap 0.0 - 1.0
-        // 2. Tampilkan dialog
+        loadingDialog.window?.setDimAmount(0.8f)
         loadingDialog.show()
 
         CoroutineScope(Dispatchers.IO).launch {
-            // Logika untuk ambil data dan delay tetap sama
             val dataJob = async {
                 val db = AppDatabase.getInstance(applicationContext)
                 db.biodataDao().getLatest()
@@ -51,10 +50,8 @@ class ResultActivity : AppCompatActivity() {
             val latestBiodata = dataJob.await()
 
             withContext(Dispatchers.Main) {
-                // 3. Tutup dialog yang sudah dibuat
                 loadingDialog.dismiss()
 
-                // Tampilkan hasil ke UI
                 if (latestBiodata != null) {
                     binding.textClassification.text = latestBiodata.hasilTes
                     binding.valueNormal.text = "${latestBiodata.scoreNormal}"
@@ -67,9 +64,13 @@ class ResultActivity : AppCompatActivity() {
                     binding.valueProtanopia.text = "Protanopia: -"
                 }
 
+                // Tombol kembali ke Menu Utama
                 binding.buttonMenu.setOnClickListener {
+                    // Hapus flag ResultActivity
+                    prefs.edit().putBoolean("IS_IN_RESULT", false).apply()
+
                     val intent = Intent(this@ResultActivity, MenuOptionActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                     finish()
                 }
