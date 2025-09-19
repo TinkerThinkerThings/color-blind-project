@@ -61,7 +61,7 @@
         android:gravity="center"
         android:textColor="#000000"
         android:textColorHint="#808080"
-        android:inputType="text"
+        android:inputType="numberSigned"
         android:imeOptions="actionDone"
         app:layout_constraintTop_toBottomOf="@id/textQuestion"
         app:layout_constraintStart_toStartOf="parent"

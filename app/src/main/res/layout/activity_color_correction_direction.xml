@@ -2,19 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAF7F0"
-    android:id="@+id/main"
     tools:context=".UI.menu.ColorCorrectionDirectionActivity">
-
 
     <ImageButton
         android:id="@+id/buttonBack"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_margin="10dp"
         android:background="@android:color/transparent"
         android:contentDescription="Kembali"
         android:src="@drawable/ic_arrow_back"
@@ -24,42 +22,46 @@
 
     <TextView
         android:id="@+id/textTitle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="KOREKSI WARNA"
         android:fontFamily="@font/aleosbold"
+        android:text="KOREKSI WARNA"
         android:textColor="@color/mainColor"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="26dp" />
+        app:layout_constraintTop_toBottomOf="@id/buttonBack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textSubtitle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
+        android:layout_marginTop="8dp"
         android:gravity="center"
-        android:layout_marginTop="9dp"
+        android:fontFamily="@font/poppins"
         android:text="Optimalkan tampilan warna sesuai kebutuhan penglihatan Anda"
         android:textColor="@color/mainColor"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/textTitle"
-        tools:layout_editor_absoluteX="27dp" />
+        app:layout_constraintTop_toBottomOf="@id/textTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <LinearLayout
         android:id="@+id/containerContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:background="@drawable/rounded_instruction_bg"
         android:clipToOutline="true"
         android:elevation="4dp"
         android:orientation="vertical"
-        android:layout_marginTop="70dp"
-        android:padding="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTitle">
+        android:padding="20dp"
+        app:layout_constraintTop_toBottomOf="@id/textSubtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:id="@+id/textDescription"
@@ -67,20 +69,17 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/poppins"
-            android:textStyle="normal"
-            android:justificationMode="inter_word"
             android:text="Fitur ini akan membantu Anda melihat gambar dengan lebih nyaman. Algoritma koreksi warna akan otomatis memproses gambar sesuai persepsi buta warna parsial Anda."
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:justificationMode="inter_word" />
 
-        <!-- Langkah-langkah -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
 
-            <!-- Langkah 1 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,7 +96,7 @@
                     android:gravity="center"
                     android:text="1"
                     android:textColor="@color/white"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -105,16 +104,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="7dp"
                     android:layout_weight="1"
-                    android:textStyle="normal"
-                    android:layout_marginTop="-7dp"
                     android:fontFamily="@font/poppins"
-                    android:justificationMode="inter_word"
                     android:text="Pilih gambar dari galeri Anda atau ambil gambar baru dengan kamera"
                     android:textColor="#475B9E"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:justificationMode="inter_word" />
             </LinearLayout>
 
-            <!-- Langkah 2 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,7 +127,7 @@
                     android:gravity="center"
                     android:text="2"
                     android:textColor="@color/white"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -139,16 +135,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="7dp"
                     android:layout_weight="1"
-                    android:textStyle="normal"
                     android:fontFamily="@font/poppins"
-                    android:layout_marginTop="-7dp"
-                    android:justificationMode="inter_word"
                     android:text="Sistem akan memproses warna dan menyesuaikannya otomatis"
                     android:textColor="#475B9E"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:justificationMode="inter_word" />
             </LinearLayout>
 
-            <!-- Langkah 3 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -159,12 +152,12 @@
                 <TextView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="14dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/ic_circle"
                     android:gravity="center"
                     android:text="3"
                     android:textColor="@color/white"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -172,24 +165,20 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="7dp"
                     android:layout_weight="1"
-                    android:layout_marginTop="-7dp"
                     android:fontFamily="@font/poppins"
-                    android:textStyle="normal"
-                    android:justificationMode="inter_word"
                     android:text="Hasil akhir akan ditampilkan dengan koreksi warna sesuai kebutuhan visual Anda."
                     android:textColor="#475B9E"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:justificationMode="inter_word" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Disclaimer -->
         <TextView
             android:id="@+id/textDisclaimer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
             android:gravity="center"
-            android:textStyle="normal"
             android:text="⚠️ Fitur ini tidak menggantikan diagnosis profesional.\nUntuk pemeriksaan lebih lanjut, silakan konsultasi ke tenaga ahli spesialis."
             android:textColor="#FFFFFF"
             android:textSize="12sp" />
@@ -200,16 +189,18 @@
         android:id="@+id/buttonStart"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_margin="55dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="24dp"
         android:backgroundTint="#475B9E"
         android:text="Coba Sekarang"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/containerContent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/containerContent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- ProgressBar -->
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
@@ -217,9 +208,8 @@
         android:layout_height="43dp"
         android:indeterminateTint="@color/mainColor"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/buttonStart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintBottom_toTopOf="@id/buttonStart"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/containerContent" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
