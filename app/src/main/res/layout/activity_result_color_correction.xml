@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:background="@color/colorsecond">
+
+    <!-- Judul -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hasil Koreksi Warna"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="12dp"
+        android:textColor="@android:color/black" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="#FAF7F0">
+
+        <ImageView
+            android:id="@+id/imgResult"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:scaleType="fitCenter"
+            android:background="@android:color/transparent"/>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Tombol Before / After -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBefore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sebelum"
+            android:elevation="4dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_rounded"
+            app:backgroundTint="@null"
+            app:cornerRadius="24dp"
+            app:rippleColor="@android:color/darker_gray"/>
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAfter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sesudah"
+            android:elevation="4dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_rounded"
+            app:backgroundTint="@null"
+            app:cornerRadius="24dp"
+            app:rippleColor="@android:color/darker_gray"/>
+    </LinearLayout>
+
+    <!-- Tombol aksi utama -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="12dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kembali"
+            android:elevation="4dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_rounded"
+            app:backgroundTint="@null"
+            app:cornerRadius="24dp"
+            app:rippleColor="@android:color/darker_gray"/>
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:elevation="4dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_rounded"
+            app:backgroundTint="@null"
+            app:cornerRadius="24dp"
+            app:rippleColor="@android:color/darker_gray"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipe koreksi: -"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/tvMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tampilan: Sesudah Koreksi"
+        android:layout_marginTop="4dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/black" />
+
+</LinearLayout>

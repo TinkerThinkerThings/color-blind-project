@@ -25,7 +25,22 @@
             android:name=".UI.menu.PrivacyActivity"
             android:exported="false" />
         <activity
+            android:name=".UI.correction.ResultColorCorrectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.menu.RealtimeProcessDirectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.menu.ColorCorrectionDirectionActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.quiz.ResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.menu.MenuProcessingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.menu.MenuColorCorrectionActivity"
             android:exported="false" />
         <activity
             android:name=".UI.quiz.IshiharaActivity"

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/koreksiwarna_bg"
+    tools:context=".UI.menu.MenuColorCorrectionActivity">
+
+  <TextView
+      android:id="@+id/tvTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+     android:layout_marginTop="60dp"
+      android:text="KOREKSI WARNA"
+      android:textColor="@color/white"
+      android:textSize="25sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+      android:id="@+id/tvSubTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingTop="15dp"
+      android:text="Pilih sumber gambar"
+      android:textColor="@color/white"
+      android:textSize="18sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+  <!-- Menu Kamera -->
+  <LinearLayout
+      android:id="@+id/btnCamera"
+      android:layout_width="300dp"
+      android:layout_height="150dp"
+      android:orientation="vertical"
+      android:gravity="center"
+      android:background="@drawable/bg_menutext"
+      android:clickable="true"
+      android:focusable="true"
+      app:layout_constraintTop_toBottomOf="@id/tvSubTitle"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      android:layout_marginTop="100dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_camera2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KAMERA"
+        android:textStyle="bold"
+        android:textColor="@color/mainColor"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ambil gambar untuk koreksi warna"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/mainColor"
+        android:textSize="12sp"
+        android:layout_marginTop="2dp" />
+
+  </LinearLayout>
+
+  <!-- Menu Galeri -->
+  <LinearLayout
+      android:id="@+id/btnGallery"
+      android:layout_width="300dp"
+      android:layout_height="150dp"
+      android:orientation="vertical"
+      android:gravity="center"
+      android:background="@drawable/bg_menutext"
+      android:clickable="true"
+      android:focusable="true"
+      app:layout_constraintTop_toBottomOf="@id/btnCamera"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      android:layout_marginTop="30dp">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_gallery" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GALERI"
+        android:textStyle="bold"
+        android:textColor="@color/mainColor"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pilih gambar dari perangkat Anda"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/mainColor"
+        android:textSize="12sp"
+        android:layout_marginTop="2dp" />
+
+  </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
