@@ -17,8 +17,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
+
+    private val prefs by lazy { getSharedPreferences("splash_prefs", MODE_PRIVATE) }
+    private val SPLASH_TIMEOUT = 30_000L // 30 detik
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // ✅ Cek fresh start
+        val isFreshStart = isTaskRoot && savedInstanceState == null
+        val lastExit = prefs.getLong("LAST_EXIT", 0L)
+        val now = System.currentTimeMillis()
+
+        if (!isFreshStart && lastExit != 0L && now - lastExit <= SPLASH_TIMEOUT) {
+            // Kalau buka lagi dalam <=30 detik & bukan fresh start → skip splash
+            goNext()
+            return
+        }
+
+        // ✅ Kalau fresh start atau sudah lama ditutup → tampilkan splash
         setContentView(R.layout.activity_splash)
 
         val logoImage: ImageView = findViewById(R.id.logoImage)
@@ -29,39 +46,51 @@ class SplashActivity : AppCompatActivity() {
             .alpha(1f)
             .setDuration(1500)
             .withEndAction {
-                // Lanjut fade-in teks setelah logo selesai
+                // Fade-in teks
                 appNameText.animate()
                     .alpha(1f)
                     .setDuration(1000)
                     .withEndAction {
-                        // Panggil database di thread IO
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val db = AppDatabase.getInstance(this@SplashActivity)
-                            val biodataList = db.biodataDao().getAll()
-
-                            val nextActivity = when {
-                                biodataList.isEmpty() -> {
-                                    // Belum ada data → jalankan onboarding Slider
-                                    SliderActivity::class.java
-                                }
-                                !biodataList[0].isIshiharaDone -> {
-                                    // Ada biodata, tapi belum selesai tes → ke menu petunjuk
-                                   MenuDirectionActivity::class.java
-                                }
-                                else -> {
-                                    // Sudah ada data & sudah selesaikan tes → ke menu utama
-                                    MenuOptionActivity::class.java
-                                }
-                            }
-                            // Pindah activity di main thread
-                            Handler(Looper.getMainLooper()).post {
-                                startActivity(Intent(this@SplashActivity, nextActivity))
-                                finish()
-                            }
-                        }
+                        goNext()
                     }
                     .start()
             }
             .start()
+    }
+
+    private fun goNext() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val db = AppDatabase.getInstance(this@SplashActivity)
+            val biodataList = db.biodataDao().getAll()
+
+            // Cek halaman terakhir yang dibuka
+            val lastActivity = prefs.getString("LAST_ACTIVITY", null)
+
+            val nextActivity = if (lastActivity != null) {
+                try {
+                    Class.forName(lastActivity)
+                } catch (e: Exception) {
+                    // fallback kalau class tidak ditemukan
+                    if (biodataList.isEmpty()) SliderActivity::class.java
+                    else if (!biodataList[0].isIshiharaDone) MenuDirectionActivity::class.java
+                    else MenuOptionActivity::class.java
+                }
+            } else {
+                if (biodataList.isEmpty()) SliderActivity::class.java
+                else if (!biodataList[0].isIshiharaDone) MenuDirectionActivity::class.java
+                else MenuOptionActivity::class.java
+            }
+
+            Handler(Looper.getMainLooper()).post {
+                startActivity(Intent(this@SplashActivity, nextActivity))
+                finish()
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Simpan waktu saat aplikasi ditutup
+        prefs.edit().putLong("LAST_EXIT", System.currentTimeMillis()).apply()
     }
 }
