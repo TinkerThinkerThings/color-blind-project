@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.colorblind.spectra.R
 import com.colorblind.spectra.UI.quiz.IshiharaActivity
@@ -46,6 +47,10 @@ class MenuDirectionActivity : AppCompatActivity() {
                 startActivity(Intent(this, IshiharaActivity::class.java))
                 finish()
             }, 2000)
+        }
+        onBackPressedDispatcher.addCallback(this) {
+            // Saat tombol back ditekan, jangan kembali ke MenuOptionActivity
+            moveTaskToBack(true)
         }
     }
 }

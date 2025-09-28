@@ -6,9 +6,9 @@ import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.colorblind.spectra.R
-import com.colorblind.spectra.UI.menu.MenuDirectionActivity
 import com.colorblind.spectra.UI.menu.MenuOptionActivity
 import com.colorblind.spectra.data.lokal.entity.EntityBiodata
 import com.colorblind.spectra.data.lokal.room.AppDatabase
@@ -54,17 +54,17 @@ class FormActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Validasi nama hanya huruf & spasi, max 100 huruf
-            val namaRegex = "^[A-Za-z\\s]{1,100}$".toRegex()
+            // Validasi nama: hanya huruf & spasi, max 40 karakter
+            val namaRegex = "^[\\p{L}\\s]{1,40}$".toRegex()
             if (!namaRegex.matches(nama)) {
-                etNama.error = "Nama hanya huruf & max 100 huruf"
+                etNama.error = "Nama hanya huruf & max 40 karakter"
                 return@setOnClickListener
             }
 
             // Validasi usia hanya angka, max 2 digit
             val usiaRegex = "^\\d{1,2}$".toRegex()
             if (!usiaRegex.matches(usiaText)) {
-                etUsia.error = "Usia hanya angka, max 2 digit"
+                etUsia.error = "Usia hanya angka, max 2 Angka"
                 return@setOnClickListener
             }
 
@@ -85,11 +85,16 @@ class FormActivity : AppCompatActivity() {
                 runOnUiThread {
                     Toast.makeText(this@FormActivity, "Data disimpan!", Toast.LENGTH_SHORT).show()
                     // Pindah ke MenuOptionActivity setelah simpan
-                    val intent = Intent(this@FormActivity, MenuDirectionActivity::class.java)
+                    val intent = Intent(this@FormActivity, MenuOptionActivity::class.java)
                     startActivity(intent)
                     finish() // Tutup FormActivity biar tidak bisa kembali
                 }
             }
+        }
+
+        // Saat tombol back ditekan, aplikasi langsung ke background
+        onBackPressedDispatcher.addCallback(this) {
+            moveTaskToBack(true)
         }
     }
 }

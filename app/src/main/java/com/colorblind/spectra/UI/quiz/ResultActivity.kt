@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import com.colorblind.spectra.R
 import com.colorblind.spectra.UI.menu.MenuOptionActivity
@@ -74,7 +75,12 @@ class ResultActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 }
+
             }
+        }
+        onBackPressedDispatcher.addCallback(this) {
+            // Saat tombol back ditekan, jangan kembali ke MenuOptionActivity
+            moveTaskToBack(true)
         }
     }
 }

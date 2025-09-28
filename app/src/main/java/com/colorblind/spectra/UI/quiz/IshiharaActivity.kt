@@ -8,6 +8,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.colorblind.spectra.R
@@ -70,6 +71,10 @@ class IshiharaActivity : AppCompatActivity() {
                 handleAnswer()
                 true
             } else false
+        }
+        onBackPressedDispatcher.addCallback(this) {
+            // Saat tombol back ditekan, jangan kembali ke MenuOptionActivity
+            moveTaskToBack(true)
         }
     }
 
@@ -313,4 +318,12 @@ class IshiharaActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("ISHIHARA_PREFS", Context.MODE_PRIVATE)
         prefs.edit().clear().apply()
     }
+//    override fun onPause() {
+//        super.onPause()
+//        val prefs = getSharedPreferences("splash_prefs", MODE_PRIVATE)
+//        prefs.edit()
+//            .putString("LAST_ACTIVITY", this::class.java.name)
+//            .putLong("LAST_EXIT_TIME", System.currentTimeMillis())
+//            .apply()
+//    }
 }
